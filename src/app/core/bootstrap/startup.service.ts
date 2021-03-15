@@ -37,7 +37,7 @@ export class StartupService {
               id: 1,
               name: 'Admin',
               email: 'admin@nowhere.com',
-              avatar: './assets/images/avatar.jpg',
+              avatar: './assets/images/avatar.svg',
             });
           },
           () => reject(),
