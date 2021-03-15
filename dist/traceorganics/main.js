@@ -1100,7 +1100,7 @@ class StartupService {
                     id: 1,
                     name: 'Admin',
                     email: 'admin@nowhere.com',
-                    avatar: './assets/images/avatar.jpg',
+                    avatar: './assets/images/avatar.svg',
                 });
             }, () => reject(), () => resolve(null));
         });
@@ -1529,7 +1529,7 @@ class LoginComponent {
             id: uid,
             name: 'Admin',
             email: 'admin@nowhere.com',
-            avatar: './assets/images/avatar.jpg',
+            avatar: './assets/images/avatar.svg',
         });
         // Set token info
         this.token.set({ token, uid, username });
