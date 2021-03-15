@@ -1,0 +1,47 @@
+<page-header>
+</page-header>
+
+
+<!-- <button mat-button [loading]="loading" [color]="color">Button</button> -->
+<button mat-mini-fab  color="primary"
+        [mtxTooltip]="tooltipAdd"
+        [mtxTooltipPosition]="position.value"
+        >
+    <mat-icon>add</mat-icon>
+</button>&nbsp;
+<ng-template #tooltipAdd>
+    <div>Agregar nuevo registro!</div>
+</ng-template>
+<button mat-mini-fab  color="accent"
+        [mtxTooltip]="tooltipEdit"
+        [mtxTooltipPosition]="position.value"
+        >
+    <mat-icon>edit</mat-icon>
+</button>
+<ng-template #tooltipEdit>
+    <div>Editar registro selecconado!</div>
+</ng-template>
+&nbsp;
+<button mat-mini-fab  color="warn"
+        [mtxTooltip]="tooltipDelete"
+        [mtxTooltipPosition]="position.value"
+        >
+    <mat-icon>delete</mat-icon>
+</button>
+<ng-template #tooltipDelete>
+    <div>Eliminar registro selecconado!</div>
+</ng-template>
+<p></p>
+<mtx-grid [data]="list"
+          [columns]="columns"
+          [multiSelectable]="multiSelectable"
+          [hideRowSelectionCheckbox]="hideRowSelectionCheckbox"
+          [rowSelectable]="rowSelectable"
+          [rowSelected]="rowSelected"
+          [rowSelectionFormatter]="rowSelectionFormatter"
+          (rowSelectionChange)="onRowSelection($event)"
+          (cellSelectionChange)="onRowSelection($event)"
+          [rowHover]="rowHover"
+          [rowStriped]="rowStriped"
+          >
+</mtx-grid>
