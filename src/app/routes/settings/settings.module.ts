@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { SharedModule } from '@shared/shared.module';
 import { SettingsRoutingModule } from './settings-routing.module';
-import { SettingsGsettingsComponent } from './gsettings/gsettings.component';
+import { GeneralSettingsComponent } from './generalsettings/generalsettings.component';
 
-const COMPONENTS = [SettingsGsettingsComponent];
+const COMPONENTS = [GeneralSettingsComponent];
 const COMPONENTS_DYNAMIC = [];
 
 @NgModule({

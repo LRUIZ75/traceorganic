@@ -146,7 +146,8 @@ class DefaultInterceptor {
         const headers = {
             'Accept': 'application/json',
             'Accept-Language': this.settings.language,
-            'Authorization': `Bearer ${this.token.get().token}`,
+            //TODO: Revert this
+            //'Authorization': `Bearer ${this.token.get().token}`,
         };
         const newReq = req.clone({ url, setHeaders: headers, withCredentials: true });
         return next.handle(newReq).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["mergeMap"])((event) => this.handleOkReq(event)), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["catchError"])((error) => this.handleErrorReq(error)));

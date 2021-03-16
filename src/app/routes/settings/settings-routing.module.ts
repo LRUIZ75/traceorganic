@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { SettingsGsettingsComponent } from './gsettings/gsettings.component';
+import { GeneralSettingsComponent } from './generalsettings/generalsettings.component';
 
-const routes: Routes = [{ path: 'gsettings', component: SettingsGsettingsComponent }
+const routes: Routes = [{ path: 'general', component: GeneralSettingsComponent }
 ];
 
 @NgModule({

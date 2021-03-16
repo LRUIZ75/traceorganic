@@ -15,7 +15,7 @@
       "type": "sub",
       "icon": "settings",
       "children": [{
-          "route": "gsettings",
+          "route": "general",
           "name": "general",
           "type": "link"
         },

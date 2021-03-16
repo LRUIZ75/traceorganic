@@ -7,9 +7,13 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 Just two steps after initializing the project, you can get a route page.
 
-$ `ng g ng-matero:module abc`
-$ `ng g ng-matero:page def -m=abc`
+`ng g ng-matero:module modulename`
 
+`ng g ng-matero:page pagename -m=modulename`
+
+Add a service
+
+`ng g service services/servicename --flat=false`
 
 ## Development server
 

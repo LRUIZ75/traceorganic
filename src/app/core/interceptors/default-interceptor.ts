@@ -38,10 +38,12 @@ export class DefaultInterceptor implements HttpInterceptor {
     const headers = {
       'Accept': 'application/json',
       'Accept-Language': this.settings.language,
-      'Authorization': `Bearer ${this.token.get().token}`,
+      //TODO: REvert this
+     // 'Authorization': `Bearer ${this.token.get().token}`,
     };
 
-    const newReq = req.clone({ url, setHeaders: headers, withCredentials: true });
+    //TODO: Modified to make work, withCredentials: true
+    const newReq = req.clone({ url, setHeaders: headers, withCredentials: false });
 
     return next.handle(newReq).pipe(
       mergeMap((event: HttpEvent<any>) => this.handleOkReq(event)),

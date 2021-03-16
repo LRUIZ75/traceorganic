@@ -27,7 +27,10 @@ const routes: Routes = [
         loadChildren: () => import('./sessions/sessions.module').then(m => m.SessionsModule),
         data: { title: 'Sessions', titleI18n: 'Sessions' },
       },
-  { path: 'settings', loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule) },
+      {
+        path: 'settings',
+        loadChildren: () => import('./settings/settings.module').then(m => m.SettingsModule),
+      },
     ],
   },
   {
@@ -46,7 +49,7 @@ const routes: Routes = [
       },
     ],
   },
-  { path: '**', redirectTo: 'dashboard' },
+  { path: '**', redirectTo: 'sessions/404' },
 ];
 
 @NgModule({

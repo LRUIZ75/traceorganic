@@ -1,21 +1,21 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 
-import { SettingsGsettingsComponent } from './gsettings.component';
+import { GeneralSettingsComponent } from './generalsettings.component';
 
 describe('GsettingsComponent', () => {
-  let component: SettingsGsettingsComponent;
-  let fixture: ComponentFixture<SettingsGsettingsComponent>;
+  let component: GeneralSettingsComponent;
+  let fixture: ComponentFixture<GeneralSettingsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SettingsGsettingsComponent ]
+      declarations: [ GeneralSettingsComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(SettingsGsettingsComponent);
+    fixture = TestBed.createComponent(GeneralSettingsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

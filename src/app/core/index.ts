@@ -8,7 +8,7 @@ export * from './bootstrap/preloader.service';
 export * from './bootstrap/translate-lang.service';
 
 // Interceptors
-export * from './interceptors';
+//@ts-nocheckexport * from './interceptors';
 
 // Authentication
 export * from './authentication/token.service';

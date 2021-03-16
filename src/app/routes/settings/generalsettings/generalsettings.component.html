@@ -10,7 +10,7 @@
     <mat-icon>add</mat-icon>
 </button>&nbsp;
 <ng-template #tooltipAdd>
-    <div>Agregar nuevo registro!</div>
+    <div>Agregar <strong>NUEVO</strong> registro</div>
 </ng-template>
 <button mat-mini-fab  color="accent"
         [mtxTooltip]="tooltipEdit"
@@ -19,7 +19,7 @@
     <mat-icon>edit</mat-icon>
 </button>
 <ng-template #tooltipEdit>
-    <div>Editar registro selecconado!</div>
+    <div>Editar registro: <strong>{{selectedName}}</strong></div>
 </ng-template>
 &nbsp;
 <button mat-mini-fab  color="warn"
@@ -29,10 +29,10 @@
     <mat-icon>delete</mat-icon>
 </button>
 <ng-template #tooltipDelete>
-    <div>Eliminar registro selecconado!</div>
+    <div>Eliminar registro: <strong>{{selectedName}}</strong></div>
 </ng-template>
 <p></p>
-<mtx-grid [data]="list"
+<mtx-grid [data]="generalSettings"
           [columns]="columns"
           [multiSelectable]="multiSelectable"
           [hideRowSelectionCheckbox]="hideRowSelectionCheckbox"

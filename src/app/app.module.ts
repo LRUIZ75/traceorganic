@@ -16,7 +16,7 @@ export function TranslateHttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
 }
 
-import { httpInterceptorProviders } from '@core/interceptors';
+//import { httpInterceptorProviders } from '@core/interceptors';
 import { appInitializerProviders } from '@core/initializers';
 import { FormlyConfigModule } from './formly-config.module';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
@@ -41,7 +41,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
     }),
     NoopAnimationsModule,
   ],
-  providers: [httpInterceptorProviders, appInitializerProviders],
+  providers: [ appInitializerProviders],
+  //httpInterceptorProviders,
   bootstrap: [AppComponent],
 })
 export class AppModule {}
