@@ -138,5 +138,22 @@
     "min": "Este valor debe ser mayor que {{number}}",
     "minlength": "Debería tener al menos {{number}} caracteres",
     "required": "El campo es requerido"
+  },
+  "record_actions": {
+    "add_new": "agregar nuevo registro",
+    "deactivate": "desactivar registro",
+    "delete": "borrar registro",
+    "edit": "editar registro",
+    "save": "guardar registro",
+    "actions": "acciones",
+    "saved": "Guardado satisfactoriamente!!",
+    "cancel": "cancelar",
+    "error_occurred": "Ha ocurrido un error!!"
+  },
+  "domain": {
+    "tax_code": "código tributario",
+    "company_name": "nombre de compañia",
+    "country_code": "código ISO-3 del país",
+    "logo": "logotipo"
   }
 }

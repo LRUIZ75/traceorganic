@@ -1,47 +1,149 @@
-<page-header>
-</page-header>
+<page-header> </page-header>
 
 
-<!-- <button mat-button [loading]="loading" [color]="color">Button</button> -->
-<button mat-mini-fab  color="primary"
-        [mtxTooltip]="tooltipAdd"
-        [mtxTooltipPosition]="position.value"
-        >
-    <mat-icon>add</mat-icon>
-</button>&nbsp;
-<ng-template #tooltipAdd>
-    <div>Agregar <strong>NUEVO</strong> registro</div>
-</ng-template>
-<button mat-mini-fab  color="accent"
-        [mtxTooltip]="tooltipEdit"
-        [mtxTooltipPosition]="position.value"
-        >
-    <mat-icon>edit</mat-icon>
-</button>
-<ng-template #tooltipEdit>
-    <div>Editar registro: <strong>{{selectedName}}</strong></div>
-</ng-template>
-&nbsp;
-<button mat-mini-fab  color="warn"
-        [mtxTooltip]="tooltipDelete"
-        [mtxTooltipPosition]="position.value"
-        >
-    <mat-icon>delete</mat-icon>
-</button>
-<ng-template #tooltipDelete>
-    <div>Eliminar registro: <strong>{{selectedName}}</strong></div>
-</ng-template>
-<p></p>
-<mtx-grid [data]="generalSettings"
-          [columns]="columns"
-          [multiSelectable]="multiSelectable"
-          [hideRowSelectionCheckbox]="hideRowSelectionCheckbox"
-          [rowSelectable]="rowSelectable"
-          [rowSelected]="rowSelected"
-          [rowSelectionFormatter]="rowSelectionFormatter"
-          (rowSelectionChange)="onRowSelection($event)"
-          (cellSelectionChange)="onRowSelection($event)"
-          [rowHover]="rowHover"
-          [rowStriped]="rowStriped"
+
+<div class="form_add_edit matero-row" 
+fxLayout="row wrap" 
+fxLayoutAlign="center center"
+*ngIf="currentAction == 'create' || currentAction == 'edit'"
+>
+    <div fxFlex="50" fxFlex.lt-sm="100"  class="matero-col">
+        <mat-card class=" mat-elevation-z1 bg-indigo-500">
+          <mat-card-title *ngIf="currentAction == 'create'">{{'record_actions.add_new'|translate|titlecase}}</mat-card-title>
+          <mat-card-title *ngIf="currentAction == 'edit'">{{'record_actions.edit'|translate|titlecase}}</mat-card-title>
+
+          
+          <form class="form-field-full" 
+          #generalSettingForm="ngForm"
+          (ngSubmit) ="onSubmit()"
           >
-</mtx-grid>
+            <mat-form-field>
+              <mat-label>{{'domain.company_name' | translate | titlecase}}</mat-label>
+              <input matInput name = "companyName" placeholder="companyName" #companyName ="ngModel" [(ngModel)]="newGeneralSetting.companyName" required>
+              <mat-error *ngIf="!companyName.valid && companyName.touched">
+                {{'validations.required' | translate}}
+              </mat-error>
+            </mat-form-field>
+   
+
+            <mat-form-field>
+              <mat-label>{{'domain.country_code' | translate | titlecase}}</mat-label>
+              <input matInput name = "countryISOCode" placeholder="NIC" #countryISOCode = "ngModel" [(ngModel)]="newGeneralSetting.countryISOCode" required>
+              <mat-error *ngIf="!countryISOCode.valid && countryISOCode.touched">
+                {{'validations.required' | translate}}
+              </mat-error>
+            </mat-form-field>
+
+            <mat-form-field>
+                <mat-label>{{'domain.tax_code' | translate | titlecase}}</mat-label>
+                <input matInput name = "taxPayerCode" placeholder="44485-545"  #taxPayerCode ="ngModel" [(ngModel)]="newGeneralSetting.taxPayerCode">
+            </mat-form-field>
+    
+            <mat-form-field>
+              <mat-label>{{'domain.logo' | translate | titlecase}}</mat-label>
+              <input matInput name = "logo" placeholder="filename.png" #logo ="ngModel" [(ngModel)]="newGeneralSetting.logo" >
+              <mat-icon matSuffix>perm_media</mat-icon>
+            </mat-form-field>
+            <div fxLayoutAlign="end center">
+              <button mat-raised-button 
+              color="accent" 
+              class="m-t-8"
+              type="submit"
+              >{{'record_actions.save'|translate | titlecase}}</button>
+              &nbsp;
+              <button mat-button 
+              color="default" 
+              class="m-t-8"
+              (click)="this.currentAction = 'retrieve';"
+              >{{'record_actions.cancel'|translate | titlecase}}</button>
+            </div>
+          </form>
+    
+        </mat-card>
+      </div>
+</div>
+
+<div class="matero-row" fxLayout="row wrap"
+*ngIf="currentAction == 'retrieve'"
+>
+  <div
+    class="matero-col"
+    fxFlex.gt-sm="25"
+    fxFlex.gt-xs="50"
+    fxFlex="100"
+    *ngFor="let gs of generalSettings"
+  >
+    <mat-card class="mat-focus-indicator text-white bg-indigo-600">
+      <mat-card-header class="mat-elevation-z3 p-8 bg-indigo-200 text-black">
+        <div mat-card-avatar><mat-icon>settings</mat-icon></div>
+        <mat-card-title class="f-s-14 text-uppercase"><strong>{{ gs.companyName }}</strong></mat-card-title>
+        <mat-card-subtitle class="f-s-10 text-gray-900">{{ gs.countryISOCode }}</mat-card-subtitle>
+        
+      </mat-card-header>
+
+      <mat-card-content class="f-s-10 p-8 text-cyan-100 mat-elevation-z1 bg-indigo-500">
+          <br>
+        <p><b>ID: </b>{{ gs._id }}</p>
+        <p><b>{{'domain.tax_code' | translate | titlecase}}: </b>{{ gs.taxPayerCode }}</p>
+        <p><b>{{'domain.logo' | translate | titlecase}}: </b>{{ gs.logo }}</p>
+      </mat-card-content>
+      <mat-card-actions fxLayoutAlign="end center">
+        <small class="text-muted">{{'record_actions.actions' | translate| titlecase}}:</small>&nbsp;
+        <ng-template #tooltipEdit>
+          <div>
+            {{'record_actions.edit' | translate}}: <strong>{{ gs.companyName }}</strong>
+          </div>
+        </ng-template>
+        <ng-template #tooltipDelete>
+          <div>
+            {{'record_actions.delete' | translate}}: <strong>{{ gs.companyName }}</strong>
+          </div>
+        </ng-template>
+
+        <button
+          mat-icon-button
+          color="accent"
+          [mtxTooltip]="tooltipEdit"
+          [mtxTooltipPosition]="position.value"
+          (click)="loadRecord(gs)"
+        >
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button
+          mat-icon-button
+          mat-focus-indicator
+          color="warn"
+          [mtxTooltip]="tooltipDelete"
+          [mtxTooltipPosition]="position.value"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
+
+<div class="customizer-handle"  cdkDrag fxLayoutAlign="end center">
+  <button mat-fab matTooltip=" {{'record_actions.add_new' | translate}}" 
+     color="primary"
+     (click)="changeActionMode('create')"
+     *ngIf="currentAction == 'retrieve'"
+     >
+    <mat-icon aria-label="Example icon-button with a settings icon">add</mat-icon>
+</button>
+</div>
+
+<!-- <mtx-grid
+  [data]="generalSettings"
+  [columns]="columns"
+  [multiSelectable]="multiSelectable"
+  [hideRowSelectionCheckbox]="hideRowSelectionCheckbox"
+  [rowSelectable]="rowSelectable"
+  [rowSelected]="rowSelected"
+  [rowSelectionFormatter]="rowSelectionFormatter"
+  (rowSelectionChange)="onRowSelection($event)"
+  (cellSelectionChange)="onRowSelection($event)"
+  [rowHover]="rowHover"
+  [rowStriped]="rowStriped"
+>
+</mtx-grid> -->

@@ -1,5 +1,8 @@
-.mat-checkbox {
-    display: inline-block;
-    margin-right: 1rem;
-    margin-bottom: 1rem;
-  }
+
+.customizer-handle {
+  position: fixed;
+  top: 130px;
+  right: 30px;
+  z-index: 1;
+}
+

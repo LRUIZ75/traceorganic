@@ -23,4 +23,11 @@ export class GeneralsettingService {
     return this._http.get(this.url + 'generalsetting');
   }
 
+  addGeneralSetting(body: any){
+    return this._http.post(this.url + 'generalsetting', body);
+  }
+
+  updateGeneralSetting(id: string, body: any){
+    return this._http.put(this.url + 'generalsetting/' + id, body);
+  }
 }
