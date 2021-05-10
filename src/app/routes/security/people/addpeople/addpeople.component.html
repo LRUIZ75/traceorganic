@@ -1,0 +1,169 @@
+<div fxLayout="row wrap" fxLayoutAlign="center center">
+  <div fxLayout.lt-md="80" fxLayout.md="50" fxLayout.lg="40" fxFlexAlign="center">
+    <mat-card class="">
+      <mat-card-title class="mat-title" *ngIf="formMode == 'ADD'">
+        {{ 'record_actions.add_new' | translate | titlecase }}:
+        {{ 'domain.people' | translate | titlecase }}
+      </mat-card-title>
+      <mat-card-title class="mat-title" *ngIf="formMode == 'EDIT'">
+        {{ 'record_actions.edit' | translate | titlecase }}:
+        {{ 'domain.people' | translate | titlecase }}
+      </mat-card-title>
+      <mat-card-content>
+
+        <form [formGroup]="personFormGroup">
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="{{ 'domain.names' | translate | titlecase }}"
+              formControlName="names"
+              required
+            />
+            <mat-error *ngIf="personFormGroup.get('names').hasError('required')">
+              {{ 'validations.required' | translate }}
+            </mat-error>
+            <mat-error *ngIf="personFormGroup.get('names').hasError('minlength')">
+              {{ 'validations.minlength' | translate }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="{{ 'domain.lastnames' | translate | titlecase }}"
+              formControlName="lastNames"
+              required
+            />
+            <mat-error *ngIf="personFormGroup.get('lastNames').hasError('required')">
+              {{ 'validations.required' | translate }}
+            </mat-error>
+            <mat-error *ngIf="personFormGroup.get('lastNames').hasError('minlength')">
+              {{ 'validations.minlength' | translate }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="{{ 'domain.citizenid' | translate | titlecase }}"
+              formControlName="citizenId"
+              required
+            />
+            <mat-error *ngIf="personFormGroup.get('citizenId').hasError('required')">
+              {{ 'validations.required' | translate }}
+            </mat-error>
+            <mat-error *ngIf="personFormGroup.get('citizenId').hasError('minlength')">
+              {{ 'validations.minlength' | translate }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="{{ 'domain.picture' | translate | titlecase }}"
+              formControlName="picture"
+            />
+
+          </mat-form-field>
+
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="{{ 'domain.phone' | translate | titlecase }}"
+              formControlName="phone"
+            />
+          </mat-form-field>
+
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="{{ 'domain.mobile' | translate | titlecase }}"
+              formControlName="mobile"
+              required
+            />
+            <mat-error *ngIf="personFormGroup.get('phone').hasError('required')">
+              {{ 'validations.mobile' | translate }}
+            </mat-error>
+            <mat-error *ngIf="personFormGroup.get('phone').hasError('minlength')">
+              {{ 'validations.mobile' | translate }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="{{ 'domain.birthdate' | translate | titlecase }}"
+              formControlName="birthdate"
+              [matDatepicker]="birthdayPicker"
+              [max]="maxBirthday"
+            />
+            <mat-datepicker-toggle matSuffix [for]="birthdayPicker"></mat-datepicker-toggle>
+            <mat-datepicker #birthdayPicker startView="year"></mat-datepicker>
+
+          </mat-form-field>
+
+
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="{{ 'domain.homeaddress' | translate | titlecase }}"
+              formControlName="homeAddress"
+            />
+
+          </mat-form-field>
+          <div class="matero-row" fxAlign="center">
+            <div class="matero-col" fxFlex="30" fxFlex.lt-sm="50" fxFlex.lt-md="40">
+              <mat-checkbox formControlName="isUser"
+                > {{'domain.isuser' | translate | titlecase }} 
+              </mat-checkbox>
+     
+              <mat-checkbox formControlName="isEmployee"
+                > {{'domain.isemployee' | translate | titlecase }} 
+              </mat-checkbox>
+  
+              <mat-checkbox formControlName="isClient"
+                > {{'domain.isclient' | translate | titlecase }} 
+              </mat-checkbox>
+            </div>
+
+            <div class="matero-col" fxFlex="30" fxFlex.lt-sm="50" fxFlex.lt-md="40">
+              <!-- in app.component.html -->
+              <ngx-dropzone (change)="onSelect($event)">
+                <ngx-dropzone-label>Nueva Fotografía: clic o arrastre</ngx-dropzone-label>
+                <ngx-dropzone-image-preview
+                  *ngFor="let f of files"
+                  [multiple]="false"
+                  accept="image/*"
+                  [removable]="true"
+                  (removed)="onRemove(f)"
+                  [file]="f"
+                >
+                  <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                </ngx-dropzone-image-preview>
+              </ngx-dropzone>
+            </div>
+          </div>
+
+
+        </form>
+      </mat-card-content>
+      <mat-card-actions align="right">
+        <button
+          *ngIf="formMode == 'ADD'"
+          mat-raised-button
+          color="default"
+          type="reset"
+          (click)="onReset()"
+        >
+          {{ 'record_actions.reset' | translate | titlecase }}
+        </button>
+        <button mat-raised-button color="default" type="cancel" (click)="onCancel()">
+          {{ 'record_actions.cancel' | translate | titlecase }}
+        </button>
+        <button mat-raised-button color="primary" type="submit" (click)="onSubmit()">
+          {{ 'record_actions.save' | translate | titlecase }}
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

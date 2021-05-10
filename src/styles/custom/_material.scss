@@ -1,0 +1,21 @@
+// Material components style fix
+
+.mat-card {
+  margin-bottom: $gutter;
+  background-color: map-get($mat-greenleaf, 50 ); //REM: Cambiado en base al tema personalizado
+}
+
+.mat-accordion {
+  display: block;
+  margin-bottom: $gutter;
+}
+
+.mat-list-base {
+  position: relative;
+}
+
+.form-field-full {
+  .mat-form-field {
+    width: 100%;
+  }
+}

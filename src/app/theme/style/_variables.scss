@@ -1,0 +1,77 @@
+@import '~@angular/material/theming';
+@import '/src/styles/custom/traceorganic';
+
+//Ornamentum changes!
+$data-table-top-header-background :  mat-color($mat-greenleaf,600);
+$data-table-row-hover-background:  mat-color($mat-greenleaf,400);
+$data-table-selected-row-hover-background:  mat-color($mat-greenleaf,400);
+
+// Layout
+$gutter: 16px !default;
+
+// Sidenav
+$sidenav-width: 240px !default;
+$sidenav-collapsed-width: 50px !default;
+$sidenav-width-mobile: 280px !default;
+
+// Toolbar
+$toolbar-height-desktop: 64px !default;
+$toolbar-height-mobile: 56px !default;
+
+// Topmenu
+$topmenu-sticky-position-desktop: $toolbar-height-desktop !default;
+$topmenu-sticky-position-mobile: $toolbar-height-mobile !default;
+
+// Typography
+$font-family-sans-serif: 'Roboto', 'Helvetica Neue Light', 'Helvetica Neue', Helvetica, Arial, 'Lucida Grande', sans-serif !default;
+$font-family-monospace: 'Roboto Mono', monospace !default;
+$font-family-base: $font-family-sans-serif !default;
+
+// Breakpoints
+//
+// Define the minimum dimensions at which your layout will change,
+// adapting to different screen sizes, for use in media queries.
+$breakpoints: (
+  xsmall: 0,
+  small:  600px,
+  medium: 960px,
+  large:  1280px,
+  xlarge: 1920px
+) !default;
+
+// Material colors
+//REM: Cambiado en base al tema Linceley
+$mat-colors: (
+  greenleaf: $mat-greenleaf,
+  linceley-blue: $mat-linceley-blue,
+  linceley-yellow: $mat-linceley-yellow,
+  red: $mat-red,
+  pink: $mat-pink,
+  purple: $mat-purple,
+  deep-purple: $mat-deep-purple,
+  indigo: $mat-indigo,
+  blue: $mat-blue,
+  light-blue: $mat-light-blue,
+  cyan: $mat-cyan,
+  teal: $mat-teal,
+  green: $mat-green,
+  light-green: $mat-light-green,
+  lime: $mat-lime,
+  yellow: $mat-yellow,
+  amber: $mat-amber,
+  orange: $mat-orange,
+  deep-orange: $mat-deep-orange,
+  brown: $mat-brown,
+  gray: $mat-gray,
+  blue-gray: $mat-blue-gray,
+  white: white,
+  black: black,
+  light: $light-primary-text,
+  dark: $dark-primary-text,
+) !default;
+
+.transparent {
+  filter: alpha(opacity=80);
+  -moz-opacity: 0.8;
+  opacity: 0.8;
+}

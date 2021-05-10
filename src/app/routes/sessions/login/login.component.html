@@ -1,0 +1,55 @@
+
+
+<div class="flex-container" fxFlexAlign="center center">
+  <div class="flex-item">
+    <img src="/assets/images/traceorganic.png" class="logo" fxFlexAlign="center">
+  </div>
+  <div class="flex-item">
+  <mat-card class="mat-elevation-z4 bg-white">
+    <mat-card-title class="text-center m-b-24">{{ 'login.title' | translate }}!</mat-card-title>
+
+    <form class="form-field-full" [formGroup]="loginForm">
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'login.username' | translate }}: </mat-label>
+        <input matInput placeholder="username or email" formControlName="username" required />
+        <mat-error *ngIf="username.invalid">
+          {{ 'login.please_enter' | translate }} <strong>user@traceorganic.com</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>{{ 'login.password' | translate }}: </mat-label>
+        <input
+          matInput
+          placeholder="password"
+          type="password"
+          formControlName="password"
+          required
+        />
+        <mat-error *ngIf="password.invalid">
+          {{ 'login.please_enter' | translate }} <strong>password</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <div class="m-y-16" fxLayout="row" fxLayoutAlign="space-between center">
+        <mat-checkbox>{{ 'login.remember_me' | translate }}</mat-checkbox>
+      </div>
+
+      <button
+        class="w-full"
+        mat-raised-button
+        color="primary"
+        [disabled]="loginForm.invalid"
+        (click)="login()"
+      >
+        {{ 'login.login' | translate }}
+      </button>
+
+      <div class="m-t-16" *ngIf = "visible">
+        {{ 'login.have_no_account' | translate }}?
+        <a routerLink="/auth/register">{{ 'login.create_one' | translate }}</a>
+      </div>
+    </form>
+  </mat-card>
+</div>
+</div>

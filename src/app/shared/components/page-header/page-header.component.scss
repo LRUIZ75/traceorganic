@@ -1,0 +1,21 @@
+@import '/src/styles/custom/traceorganic';
+
+.matero-page-header {
+  display: block;
+  padding: 16px;
+  margin: -16px -16px 16px;
+  background-color: rgba(map-get($mat-greenleaf , 700 ),.95); //REM: Cambiado en base al tema personalizado
+  color: map-get($mat-greenleaf , 50 ); //REM: Cambiado en base al tema personalizado
+
+
+  .matero-breadcrumb {
+    margin-top: 8px;
+    margin-bottom: 0;
+  }
+}
+
+.matero-page-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 400;
+}

@@ -1,0 +1,136 @@
+<div fxLayout="row wrap" fxLayoutAlign="center center">
+  <div fxLayout.lt-md="80" fxLayout.md="50" fxLayout.lg="40" fxFlexAlign="center">
+    <mat-card class="">
+      <mat-card-title class="mat-title" *ngIf="formMode == 'ADD'">
+        {{ 'record_actions.add_new' | translate | titlecase }}:
+        {{ 'domain.drivers' | translate | titlecase }}
+      </mat-card-title>
+      <mat-card-title class="mat-title" *ngIf="formMode == 'EDIT'">
+        {{ 'record_actions.edit' | translate | titlecase }}:
+        {{ 'domain.drivers' | translate | titlecase }}
+      </mat-card-title>
+      <mat-card-content>
+        <form [formGroup]="driverFormGroup">
+
+          <mat-form-field>
+            <mat-select
+              placeholder="{{ 'domain.company' | translate | titlecase }}"
+              formControlName="company"
+              required
+            >
+              <mat-option *ngFor="let item of companyList" [value]="item._id">
+                {{ item.fullName }}
+              </mat-option>
+            </mat-select>
+
+            <mat-error *ngIf="driverFormGroup.get('company').hasError('required')">
+              {{ 'validations.required' | translate }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-select
+              placeholder="{{ 'domain.person' | translate | titlecase }}"
+              formControlName="person"
+              required
+            >
+              <mat-option *ngFor="let item of personList" [value]="item._id">
+                {{ item.names + ' ' + (!item.lastNames ? '' : item.lastNames) }}
+              </mat-option>
+            </mat-select>
+
+            <mat-error *ngIf="driverFormGroup.get('person').hasError('required')">
+              {{ 'validations.required' | translate }}
+            </mat-error>
+          </mat-form-field>
+
+          <div>
+            <mat-checkbox formControlName="isExternal"  (change)="onChangeIsExternal($event)">{{
+              'domain.isexternal' | translate | titlecase
+            }}</mat-checkbox>
+            <mat-checkbox formControlName="isActive">{{
+              'domain.isActive' | translate | titlecase
+            }}</mat-checkbox>
+            <mat-checkbox formControlName="isAvailable">{{
+              'domain.isavailable' | translate | titlecase
+            }}</mat-checkbox>
+          </div>
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="{{ 'domain.licensecard' | translate | titlecase }}"
+              formControlName="licenseCard"
+              required
+            />
+            <mat-error *ngIf="driverFormGroup.get('licenseCard').hasError('required')">
+              {{ 'validations.required' | translate }}
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="{{ 'domain.insurancecard' | translate | titlecase }}"
+              formControlName="insuranceCard"
+              required
+            />
+            <mat-error *ngIf="driverFormGroup.get('insuranceCard').hasError('required')">
+              {{ 'validations.required' | translate }}
+            </mat-error>
+          </mat-form-field>
+
+
+          <div class="matero-row" fxAlign="center">
+            <div class="matero-col" fxFlex="30" fxFlex.lt-sm="50" fxFlex.lt-md="50">
+              <ngx-dropzone (change)="onSelectLicenseCard($event)">
+                <ngx-dropzone-label>Nueva Fotografía de Licencia de conducir: clic o arrastre</ngx-dropzone-label>
+                <ngx-dropzone-image-preview
+                  *ngFor="let f of filesLicenseCard"
+
+                  accept="image/*"
+                  [removable]="true"
+                  (removed)="onSelectLicenseCard(f)"
+                  [file]="f"
+                >
+                  <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                </ngx-dropzone-image-preview>
+              </ngx-dropzone>
+            </div>
+            <div class="matero-col" fxFlex="30" fxFlex.lt-sm="50" fxFlex.lt-md="50">
+              <ngx-dropzone (change)="onSelectInsuranceCard($event)">
+                <ngx-dropzone-label>Nueva Fotografía de tarjeta de seguro: clic o arrastre</ngx-dropzone-label>
+                <ngx-dropzone-image-preview
+                  *ngFor="let fi of filesInsuranceCard"
+
+                  accept="image/*"
+                  [removable]="true"
+                  (removed)="onSelectInsuranceCard(fi)"
+                  [file]="fi"
+                >
+                  <ngx-dropzone-label>{{ fi.name }} ({{ fi.type }})</ngx-dropzone-label>
+                </ngx-dropzone-image-preview>
+              </ngx-dropzone>
+            </div>
+          </div>
+
+        </form>
+      </mat-card-content>
+      <mat-card-actions align="right">
+        <button
+          *ngIf="formMode == 'ADD'"
+          mat-raised-button
+          color="default"
+          type="reset"
+          (click)="onReset()"
+        >
+          {{ 'record_actions.reset' | translate | titlecase }}
+        </button>
+        <button mat-raised-button color="default" type="cancel" (click)="onCancel()">
+          {{ 'record_actions.cancel' | translate | titlecase }}
+        </button>
+        <button mat-raised-button color="primary" type="submit" (click)="onSubmit()">
+          {{ 'record_actions.save' | translate | titlecase }}
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
