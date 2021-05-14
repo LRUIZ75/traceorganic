@@ -2,7 +2,7 @@
   "name": "traceorganic",
   "version": "1.0.0",
   "scripts": {
-    "ng": "ng",
+    "ng": "ng serve",
     "start": "node server.js",
     "build": "ng build",
     "test": "ng test",

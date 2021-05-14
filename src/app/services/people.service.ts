@@ -98,7 +98,7 @@ export class PeopleService {
     formData.append('picture', picture);
     const req = new HttpRequest('PUT', `${this.endpoint}picture/${id}`, formData, {
       reportProgress: true,
-      responseType: 'json',
+      responseType: 'json'
     });
     return this.http.request(req).pipe(map(this.extractData), catchError(this.handleError));
   }

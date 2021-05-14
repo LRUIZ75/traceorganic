@@ -9,7 +9,7 @@ import { ToastrService } from 'ngx-toastr';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']
+  styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent implements OnInit {
   loginForm: FormGroup;
@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private router: Router, 
+    private router: Router,
     private token: TokenService,
     private startup: StartupService,
     private settings: SettingsService,
@@ -43,47 +43,48 @@ export class LoginComponent implements OnInit {
     return this.loginForm.get('password');
   }
 
-  async login() {
-
+  login() {
     //invocar al servicio de login
-    var credentials ={ username: this.username.value , password: this.password.value};
+    var credentials = { username: this.username.value, password: this.password.value };
 
-    await this.authService.login(credentials).toPromise().then(
+    this.authService.login(credentials).toPromise().then(
       res => {
         var jsonResponse = JSON.stringify(res);
+        console.log(jsonResponse);
         var response = JSON.parse(jsonResponse);
-        if (response.status != 'ok') {
-          this.toaster.error(response.message);
-          return;
-        }
-        this.authData = response;
+
+        this.authData = response.body;
+        if (!this.authData) return;
+        
+        const { token, uid, username } = {
+          token: this.authData.token,
+          uid: this.authData.data._id,
+          username: this.authData.data.username,
+        };
+        // Set user info
+        this.settings.setUser({
+          id: uid,
+          name: username,
+          email: this.authData.data.email,
+          avatar: './assets/images/avatar.jpg',
+        });
+        // Set token info
+        this.token.set({ token, uid, username });
+        // Regain the initial data
+        this.startup.load().then(() => {
+          let url = this.token.referrer!.url || '/';
+          if (url.includes('/auth')) {
+            url = '/';
+          }
+          this.router.navigateByUrl(url);
+        });
       }
     )
-    .catch(err=>{
-      if (err.substring(0, 3) != '404') {
-        this.toaster.error(err);
+    .catch( err => {
+      if (err) {
+        console.log(JSON.stringify(err));
       }
     });
-
-    if(!this.authData)
-      return;
-    const { token, uid, username } = { token: this.authData.token, uid: this.authData.user._id, username: this.authData.user.username };
-    // Set user info
-    this.settings.setUser({
-      id: uid,
-      name: username,
-      email: this.authData.user.email,
-      avatar: './assets/images/avatar.jpg',
-    });
-    // Set token info
-    this.token.set({ token, uid, username });
-    // Regain the initial data
-    this.startup.load().then(() => {
-      let url = this.token.referrer!.url || '/';
-      if (url.includes('/auth')) {
-        url = '/';
-      }
-      this.router.navigateByUrl(url);
-    });
+     
   }
 }

@@ -45,7 +45,12 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
+                },
+                {
+                  "replace": "proxy.config.ts",
+                  "with": "proxy.config.prod.ts"
                 }
+
               ],
               "optimization": true,
               "outputHashing": "all",
@@ -80,16 +85,19 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "traceorganic:build",
-            "proxyConfig": "proxy.config.js"
+            "browserTarget": "traceorganic:build"
+            ,"proxyConfig": "proxy.config.js"
+
           },
           "configurations": {
             "production": {
               "browserTarget": "traceorganic:build:production"
+              ,"proxyConfig": "proxy.config.js"
             },
             "hmr": {
               "hmr": true,
               "browserTarget": "traceorganic:build:hmr"
+              ,"proxyConfig": "proxy.config.js"
             }
           }
         },

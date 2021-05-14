@@ -9,7 +9,7 @@ import {
   HttpResponse,
 } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
-import { mergeMap, catchError } from 'rxjs/operators';
+import { mergeMap, catchError, map } from 'rxjs/operators';
 import { environment } from '@env/environment';
 
 import { ToastrService } from 'ngx-toastr';
@@ -33,42 +33,76 @@ export class DefaultInterceptor implements HttpInterceptor {
     if (!url.includes('/api/')) {
       return next.handle(req);
     }
+/* 
+        // Only intercept API url
+    if (url.includes('/api/login/')) {
+          console.log("NO INTERCEPTION: " + url);
+          return next.handle(req);
+    } */
 
+    console.log("API CALL: " + url);
     // All APIs need JWT authorization
-    const headers = {
-      'Accept': 'application/json',
-      'Accept-Language': this.settings.language,
-      'Authorization': `Bearer ${this.token.get().token}`,
-    };
 
-    const newReq = req.clone({ url, setHeaders: headers, withCredentials: true });
+    let headers: any;
+
+    if(url.includes('/api/login/')) {
+      headers = {
+        'Accept': 'application/json',
+        'Accept-Language': this.settings.language
+      };
+      //newReq = req.clone({ url, setHeaders: headers});
+      console.log("Headers: " + JSON.stringify(headers));
+    }
+    else {
+      headers = {
+        'Accept': 'application/json',
+        'Accept-Language': this.settings.language,
+        'Authorization': `Bearer ${this.token.get().token}`
+      };
+      
+      console.log("Headers: " + JSON.stringify(headers));
+    }
+
+    const newReq = req.clone({ setHeaders: headers, withCredentials: true});
+    
+    //return next.handle(newReq);
+    
 
     return next.handle(newReq).pipe(
-      mergeMap((event: HttpEvent<any>) => this.handleOkReq(event)),
-      catchError((error: HttpErrorResponse) => this.handleErrorReq(error))
-    );
+    mergeMap((event: HttpEvent<any>) => this.handleOkReq(event)),
+    catchError((error: HttpErrorResponse) => this.handleErrorReq(error))
+  );
   }
 
   private goto(url: string) {
     setTimeout(() => this.router.navigateByUrl(url));
   }
 
+
+  private extractData(res: HttpResponse<any>): any {
+    const body = res;
+    return body || {};
+  }
+
   private handleOkReq(event: HttpEvent<any>): Observable<any> {
     if (event instanceof HttpResponse) {
       const body: any = event.body;
-      // failure: { code: **, msg: 'failure' }
-      // success: { code: 0,  msg: 'success', data: {} }
-      if (body && body.code !== 0) {
-        if (body.msg && body.msg !== '') {
+      console.log(JSON.stringify(body));
+      // failure: { status: **, message: 'failure' }
+      // success: { status: 'ok',  message?: 'success', data: {} }
+
+
+      if (body && body.status !== 'ok') {
+        if (body.message && body.message !== '') {
           this.toastr.error(body.msg);
         }
         return throwError([]);
       } else {
-        return of(event);
+        return of(event); //regresa full la respuesta!, asi que ojo con el body!!!
       }
     }
     // Pass down event if everything is OK
-    return of(event);
+    return of(event); //regresa full la respuesta!, asi que ojo con el body!!!
   }
 
   private handleErrorReq(error: HttpErrorResponse): Observable<never> {

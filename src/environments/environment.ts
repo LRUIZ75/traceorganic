@@ -3,11 +3,11 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  SERVER_ORIGIN: '',
+  SERVER_ORIGIN: 'http://localhost:5000',
   production: false,
   useHash: false,
   hmr: false,
-  apiURL: 'http://localhost:5000/API/'
+  apiURL: '/api/'
 };
 
 /*

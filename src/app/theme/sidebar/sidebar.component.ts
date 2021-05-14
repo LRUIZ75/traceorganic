@@ -8,7 +8,7 @@ import { Component, Output, EventEmitter, Input, ViewEncapsulation } from '@angu
 })
 export class SidebarComponent {
   @Input() showToggle = true;
-  @Input() showUser = false; //TODO: Disabled by LRUIZ
+  @Input() showUser = true; //TODO: Disabled by LRUIZ
   @Input() showHeader = true; //Controla el header con el branding
   @Input() toggleChecked = false;
 
