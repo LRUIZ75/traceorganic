@@ -1,7 +1,10 @@
-import { catchError } from 'rxjs/internal/operators';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { map } from 'rxjs/operators';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpEvent,
+  HttpRequest,
+} from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { environment } from '@env/environment';
 
@@ -14,6 +17,9 @@ export interface Company {
     lat: number;
     lng: number;
   };
+  taxPayerCode: string;
+  countryISOCode: string;
+  logo: string;
 }
 
 @Injectable({
@@ -21,67 +27,68 @@ export interface Company {
 })
 export class CompaniesService {
   public endpoint: string;
+  public initOptions: any = {
+    "responseType": "json",
+    "withCredentials": true
+    };
 
-  constructor(private http: HttpClient
-    ) {
+  constructor(private http: HttpClient) {
     this.endpoint = environment.apiURL + 'company/';
-    console.log('Conectando a :' + this.endpoint);
+    //console.log('Conectando a :' + this.endpoint);
   }
-
-  private handleError(error: HttpErrorResponse): any {
-    if (error.error instanceof ErrorEvent) {
-      console.error('Ocurrió un error:', error.status, error.error.message);
-    } else {
-      console.error(
-        `El backend devolvió =>
-    ${error.message}`
-      );
-      console.debug(JSON.stringify(error.error));
-    }
-    return throwError(`${error.status} ` + JSON.stringify(error.error));
-  }
-
-  private extractData(res: Response): any {
-    const body = res;
-    return body || {};
-  }
-
 
   /**
-   * Adds new user by API
-   * @param  {any} body -New data for user
+   * Add new Company
+   * @param body Data for new Company
+   * @returns New Company Data
    */
-  addData(body: any): Observable<any> {
-    return this.http
-      .post(this.endpoint, body)
-      .pipe(map(this.extractData), catchError(this.handleError));
+  addData(body: any): Observable<HttpEvent<unknown> | HttpErrorResponse> {
+    const req = new HttpRequest('POST', `${this.endpoint}`, body, this.initOptions);
+    return this.http.request(req).pipe();
   }
 
-  getData(): Observable<any> {
-    return this.http.get(this.endpoint).pipe(map(this.extractData), catchError(this.handleError));
+  /**
+   * Get Company data
+   * @param id Company ID
+   * @returns Company Data or Array
+   */
+  getData(id?: string): Observable<HttpEvent<unknown> | HttpErrorResponse> {
+    id = (id === undefined)?'':id;
+    const req = new HttpRequest('GET', `${this.endpoint}${id}`, null, this.initOptions);
+    return this.http.request(req).pipe();
   }
 
-  getDataById(id: string): Observable<any> {
-    return this.http
-      .get(this.endpoint + id)
-      .pipe(map(this.extractData), catchError(this.handleError));
+  /**
+   * Update Company data
+   * @param id Company ID
+   * @param body Data to update
+   * @returns Updated company data
+   */
+  updateData(id: string, body: any): Observable<HttpEvent<unknown> | HttpErrorResponse> {
+    id = (id === undefined)?'':id;
+    const req = new HttpRequest('PUT', `${this.endpoint}${id}`, body, this.initOptions);
+    return this.http.request(req).pipe();
   }
 
-  updateData(id: string, body: any): Observable<any> {
-    return this.http
-      .put(this.endpoint + id, body)
-      .pipe(map(this.extractData), catchError(this.handleError));
+  /**
+   * Delete Company Data
+   * @param id Company ID
+   * @returns Deleted company data
+   */
+  deleteData(id: string): Observable<HttpEvent<unknown> | HttpErrorResponse> {
+    id = (id === undefined)?'':id;
+    const req = new HttpRequest('DELETE', `${this.endpoint}${id}`, null, this.initOptions);
+    return this.http.request(req).pipe();
   }
 
-  deleteData(id: string): Observable<any> {
-    return this.http
-      .delete(this.endpoint + id)
-      .pipe(map(this.extractData), catchError(this.handleError));
-  }
-
-  deactivateData(id: string): Observable<any> {
-    return this.http
-      .delete(this.endpoint + id)
-      .pipe(map(this.extractData), catchError(this.handleError));
+  /**
+   * Deactivate Company (isActive = false)
+   * @param id Company ID
+   * @returns Deactivated Company data
+   */
+  deactivateData(id: string): Observable<HttpEvent<unknown> | HttpErrorResponse> {
+    id = (id === undefined)?'':id;
+    var body = {isActive: false};
+    return this.updateData(id,body);
   }
 }

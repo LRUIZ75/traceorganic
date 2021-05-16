@@ -33,12 +33,6 @@ export class DefaultInterceptor implements HttpInterceptor {
     if (!url.includes('/api/')) {
       return next.handle(req);
     }
-/* 
-        // Only intercept API url
-    if (url.includes('/api/login/')) {
-          console.log("NO INTERCEPTION: " + url);
-          return next.handle(req);
-    } */
 
     console.log("API CALL: " + url);
     // All APIs need JWT authorization
@@ -78,18 +72,12 @@ export class DefaultInterceptor implements HttpInterceptor {
     setTimeout(() => this.router.navigateByUrl(url));
   }
 
-
-  private extractData(res: HttpResponse<any>): any {
-    const body = res;
-    return body || {};
-  }
-
   private handleOkReq(event: HttpEvent<any>): Observable<any> {
     if (event instanceof HttpResponse) {
       const body: any = event.body;
       console.log(JSON.stringify(body));
-      // failure: { status: **, message: 'failure' }
-      // success: { status: 'ok',  message?: 'success', data: {} }
+      // failure: { status: 'error'|'**' message: 'failure' }
+      // success: { status: 'ok',  message?: 'success message', data: {}, token?: 'JWT Token'}
 
 
       if (body && body.status !== 'ok') {
