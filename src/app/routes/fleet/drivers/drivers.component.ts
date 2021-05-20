@@ -8,6 +8,7 @@ import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confir
 //Import services
 import { Company, CompaniesService, Employee, EmployeesService, Person,PeopleService, Driver,DriversService} from 'app/services';
 import { DataTableTranslations } from 'ornamentum';
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-fleet-drivers',
@@ -68,8 +69,10 @@ export class FleetDriversComponent implements OnInit {
     this.companyService
       .getData()
       .toPromise()
-      .then(resp => {
-        this.companyList = resp.objects;
+      .then(res => {
+        var response = <HttpResponse<any>> res;
+        if(response.statusText =="OK")
+          this.companyList = response.body.data;
       });
   }
   getEmployeeList() {

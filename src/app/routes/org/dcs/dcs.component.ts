@@ -9,6 +9,7 @@ import { DataTableTranslations } from 'ornamentum';
 
 //Import services
 import { Company, CompaniesService, DistributionCenter, DistributionCentersService } from 'app/services';
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-org-dcs',
@@ -84,8 +85,10 @@ export class OrgDcsComponent implements OnInit {
     this.companyService
       .getData()
       .toPromise()
-      .then(resp => {
-        this.companyList = resp.objects;
+      .then(res => {
+        var response = <HttpResponse<any>> res;
+        if(response.statusText=="OK")
+          this.companyList = response.body.data;
       });
   }
 

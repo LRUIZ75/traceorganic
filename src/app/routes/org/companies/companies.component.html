@@ -129,8 +129,11 @@
         </td>
       </ng-template>
     </ng-data-table-column>
+
     <ng-template #ngDataTableNoRecords>
-      <h1 color="text-linceley-yellow-900"><mat-icon>api</mat-icon> {{notifications.nodata | translate | titlecase}}</h1>
+      <mat-icon>hourglass_empty</mat-icon> 
+      <h4>{{'notifications.nodata' | translate | uppercase}}</h4>
     </ng-template>
+    
   </ng-data-table>
 </mat-card>

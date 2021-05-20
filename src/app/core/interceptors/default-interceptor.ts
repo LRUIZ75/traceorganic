@@ -34,38 +34,36 @@ export class DefaultInterceptor implements HttpInterceptor {
       return next.handle(req);
     }
 
-    console.log("API CALL: " + url);
+    console.log('API CALL: ' + url);
     // All APIs need JWT authorization
 
     let headers: any;
 
-    if(url.includes('/api/login/')) {
-      headers = {
-        'Accept': 'application/json',
-        'Accept-Language': this.settings.language
-      };
-      //newReq = req.clone({ url, setHeaders: headers});
-      console.log("Headers: " + JSON.stringify(headers));
-    }
-    else {
+    if (url.includes('/api/login/')) {
       headers = {
         'Accept': 'application/json',
         'Accept-Language': this.settings.language,
-        'Authorization': `Bearer ${this.token.get().token}`
       };
-      
-      console.log("Headers: " + JSON.stringify(headers));
+      //newReq = req.clone({ url, setHeaders: headers});
+      console.log('Headers: ' + JSON.stringify(headers));
+    } else {
+      headers = {
+        'Accept': 'application/json',
+        'Accept-Language': this.settings.language,
+        'Authorization': `Bearer ${this.token.get().token}`,
+      };
+
+      console.log('Headers: ' + JSON.stringify(headers));
     }
 
-    const newReq = req.clone({ setHeaders: headers, withCredentials: true});
-    
+    const newReq = req.clone({ setHeaders: headers, withCredentials: true });
+
     //return next.handle(newReq);
-    
 
     return next.handle(newReq).pipe(
-    mergeMap((event: HttpEvent<any>) => this.handleOkReq(event)),
-    catchError((error: HttpErrorResponse) => this.handleErrorReq(error))
-  );
+      mergeMap((event: HttpEvent<any>) => this.handleOkReq(event)),
+      catchError((error: HttpErrorResponse) => this.handleErrorReq(error))
+    );
   }
 
   private goto(url: string) {
@@ -75,10 +73,9 @@ export class DefaultInterceptor implements HttpInterceptor {
   private handleOkReq(event: HttpEvent<any>): Observable<any> {
     if (event instanceof HttpResponse) {
       const body: any = event.body;
-      console.log(JSON.stringify(body));
-      // failure: { status: 'error'|'**' message: 'failure' }
-      // success: { status: 'ok',  message?: 'success message', data: {}, token?: 'JWT Token'}
 
+      // failure: { status: 'error'|'**' message: 'failure' }
+      // success: { status: 'ok',  message?: ' message', data: {}, token?: 'JWT Token'}
 
       if (body && body.status !== 'ok') {
         if (body.message && body.message !== '') {
@@ -101,12 +98,15 @@ export class DefaultInterceptor implements HttpInterceptor {
       case 403:
       case 404:
       case 500:
-        this.goto(`/sessions/${error.status}`);
+
+        if (error.url.includes('/api/'))
+          this.toastr.error(error.error.message || `${error.status} ${error.statusText}`);
+        else this.goto(`/sessions/${error.status}`);
+
         break;
       default:
         if (error instanceof HttpErrorResponse) {
-          console.error('ERROR', error);
-          this.toastr.error(error.error.msg || `${error.status} ${error.statusText}`);
+          this.toastr.error(error.message || `${error.status} ${error.statusText}`);
         }
         break;
     }

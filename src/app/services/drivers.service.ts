@@ -8,19 +8,11 @@ import { environment } from '@env/environment';
 export interface Driver
 {
   _id: string,
-  employee: string,
-  isExternal: boolean,
   person: string,
-  company: string,
-  isActive: boolean,
-  isAvailable: boolean,
+  creationDate: Date,
   licenseCard: string,
   insuranceCard: string,
-  documentsComparison: {
-      licenseCard: string,
-      insuranceCard: string,
-      isOk: boolean
-  }
+  isActive: boolean
 }
 
 @Injectable({

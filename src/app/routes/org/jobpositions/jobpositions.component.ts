@@ -16,6 +16,7 @@ import {
   RolesService,
   JobPosition
 } from 'app/services';
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-org-jobpositions',
@@ -93,8 +94,9 @@ export class OrgJobpositionsComponent implements OnInit {
     this.companyService
       .getData()
       .toPromise()
-      .then(resp => {
-        this.companyList = resp.objects;
+      .then((resp) => {
+        var response = <HttpResponse<any>> resp;
+        this.companyList = response.body.data;
       });
   }
 

@@ -68,6 +68,29 @@
               'domain.isActive' | translate | titlecase
             }}</mat-checkbox>
           </div>
+
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="{{ 'domain.taxPayerCode' | translate | titlecase }}"
+              formControlName="taxPayerCode"
+            />
+            <mat-error *ngIf="companyFormGroup.get('taxPayerCode').hasError('required')">
+              {{ 'validations.required' | translate }}
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field>
+            <input
+              matInput
+              placeholder="{{ 'domain.countryISOCode' | translate | titlecase }}"
+              formControlName="countryISOCode"
+            />
+            <mat-error *ngIf="companyFormGroup.get('countryISOCode').hasError('required')">
+              {{ 'validations.required' | translate }}
+            </mat-error>
+          </mat-form-field>
+
         </form>
       </mat-card-content>
       <mat-card-actions align="right">

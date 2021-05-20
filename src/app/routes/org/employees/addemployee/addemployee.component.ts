@@ -1,3 +1,4 @@
+import { HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
@@ -102,12 +103,11 @@ export class AddemployeeComponent implements OnInit {
     this.companyService
       .getData()
       .toPromise()
-      .then(response => {
-        if (!response) {
-          this.toaster.error('No hay datos de compañías!');
-          return;
+      .then(res => {
+        var response = <HttpResponse<any>> res;
+        if(response.statusText=="OK"){
+          this.companies = response.body.data;
         }
-        this.companies = response.objects;
         switch (this.formMode) {
           case 'ADD':
             this.companyList = this.companies.filter(company => company.isActive == true);
@@ -115,9 +115,6 @@ export class AddemployeeComponent implements OnInit {
           default:
             this.companyList = this.companies.filter(company => company.isActive == true);
         }
-      })
-      .catch(err => {
-        this.toaster.error(err.message);
       });
   }
 

@@ -271,5 +271,13 @@
     "nodata": "No hay datos disponibles!",
     "can_deactivate": "Proceder en desactivar el registro",
     "can_delete": "Proceder en eliminar el registro"
+  },
+  "HTTPSTATUS": {
+    "Msg500": "Intente refrescar en unos momentos",
+    "Title500": "El servidor ha fallado!",
+    "Msg403": "No tienes permisos para accesar a los datos solicitados",
+    "Msg404": "Esta no es la página web que buscó.",
+    "Title403": "Permiso denegado!",
+    "Title404": "Página no encontrada!"
   }
 }

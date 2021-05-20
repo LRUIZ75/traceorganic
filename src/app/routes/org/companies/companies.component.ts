@@ -6,10 +6,10 @@ import { MtxDialog } from '@ng-matero/extensions/dialog';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 
-
 //Import services
 import { Company, CompaniesService } from 'app/services';
 import { DataTableTranslations } from 'ornamentum';
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-org-companies',
@@ -41,10 +41,9 @@ export class OrgCompaniesComponent implements OnInit {
     this.getList();
   }
 
-  getTitle()
-  {
+  getTitle() {
     this.title = this.translate.instant('domain.companies');
-  
+
     return this.title;
   }
 
@@ -54,11 +53,10 @@ export class OrgCompaniesComponent implements OnInit {
     } else {
       console.log('geolocation is NOT available');
     }
-
   }
 
   getDataTableTranslations(): DataTableTranslations {
-     this.dataTableTranslations = {
+    this.dataTableTranslations = {
       pagination: {
         limit: this.translate.instant('pagination.limit'),
         rangeKey: this.translate.instant('pagination.records'),
@@ -71,34 +69,24 @@ export class OrgCompaniesComponent implements OnInit {
       noDataMessage: this.translate.instant('notifications.nodata'),
       dropdownFilter: {
         filterPlaceholder: this.translate.instant('record_actions.search'),
-        selectPlaceholder: this.translate.instant('record_actions.search')
+        selectPlaceholder: this.translate.instant('record_actions.search'),
       },
-      columnSelector: { header: ">>"}
-        
-      
+      columnSelector: { header: '>>' },
     };
     return this.dataTableTranslations;
   }
 
   getList() {
-    /*     this.isLoading=true; */
-    this.companyService.getData().subscribe(
-      res => {
-        if (res) {
-          var jsonResponse = JSON.stringify(res);
-          var response = JSON.parse(jsonResponse);
-          if (response.status != 'ok') return;
-          this.companyList = response.objects as Company[];
+    this.companyService
+      .getData()
+      .toPromise()
+      .then(res => {
+        var response = <HttpResponse<any>>res;
+        if (response.statusText == 'OK') {
+          this.companyList = response.body.data as Company[];
           //this.userList = this.userList.filter(it => it.isActive == true);
         }
-      },
-      err => {
-        if (err.substring(0, 3) != '404') {
-          var msg = this.translate.instant('record_actions.error_occurred');
-          this.toaster.error(err);
-        }
-      }
-    );
+      });
   }
 
   handleDragStart(event: CdkDragStart): void {
@@ -130,7 +118,8 @@ export class OrgCompaniesComponent implements OnInit {
     const confirmDialog = this.confirmDialog.open(ConfirmDialogComponent, {
       data: {
         title: this.translate.instant('record_actions.deactivate'),
-        message: this.translate.instant('notifications.can_deactivate') + ': ' + selected.fullName + ' ?',
+        message:
+          this.translate.instant('notifications.can_deactivate') + ': ' + selected.fullName + ' ?',
         button1Text: this.translate.instant('buttons.yes').toUpperCase(),
         button2Text: this.translate.instant('buttons.no').toUpperCase(),
       },
@@ -152,15 +141,15 @@ export class OrgCompaniesComponent implements OnInit {
       .toPromise()
       .then(deleted => {
         if (deleted) {
-          this.toaster.success('Operación exitosa!');
+          this.toaster.success('DESACTIVADO!');
           this.getList();
         } else {
-          this.toaster.error('Operación fallida!');
+          this.toaster.error('NO DESACTIVADO!');
           return;
         }
       })
       .catch(err => {
-        this.toaster.error(err);
+        this.toaster.error('NO DESACTIVADO!');
         return;
       });
   }
@@ -177,8 +166,4 @@ export class OrgCompaniesComponent implements OnInit {
   changeSort(e: any) {
     console.log(e);
   }
-
-  /*   enableRowExpandable() {
-    this.columns[0].showExpand = this.expandable;
-  } */
 }

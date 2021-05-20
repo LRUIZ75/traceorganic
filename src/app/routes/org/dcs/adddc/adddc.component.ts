@@ -1,3 +1,4 @@
+import { HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import {
@@ -80,9 +81,12 @@ export class AdddcComponent implements OnInit {
     this.companyService
       .getData()
       .toPromise()
-      .then(resp => {
-        this.companyList = resp.objects;
-        if(this.formMode=="ADD")
+      .then(res => {
+        var response = <HttpResponse<any>> res;
+        if(response.statusText =="OK")
+          this.companyList = response.body.data;
+          
+        if (this.formMode == 'ADD')
           this.companyList = this.companyList.filter(company => company.isActive);
       });
   }
@@ -143,18 +147,16 @@ export class AdddcComponent implements OnInit {
 
     switch (this.formMode) {
       case 'EDIT':
-        this.companyService
+        this.distributionCenterService
           .updateData(this.initialData._id, this.distributioncenter)
           .toPromise()
-          .then(resp => {
-            if (!resp) {
-              this.toaster.error('Operación fallida!');
-              return;
+          .then(res => {
+            var response = <HttpResponse<any>>res;
+            if (response.statusText == 'OK') {
+              this.distributioncenter = <DistributionCenter>response.body.data;
+              this.toaster.success('Operación exitosa!');
+              this.changeState('RETRIEVE');
             }
-
-            this.distributioncenter = <DistributionCenter>resp.updated;
-            this.toaster.success('Operación exitosa!');
-            this.changeState('RETRIEVE');
           })
           .catch(err => {
             this.toaster.error(err);

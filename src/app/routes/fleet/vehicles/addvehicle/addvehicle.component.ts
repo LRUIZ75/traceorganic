@@ -1,3 +1,4 @@
+import { HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 //import { MatCheckboxChange } from '@angular/material/checkbox';
@@ -79,12 +80,12 @@ export class AddvehicleComponent implements OnInit {
     this.companyService
       .getData()
       .toPromise()
-      .then(response => {
-        if (!response) {
-          this.toaster.error('No hay datos de compañías!');
-          return;
-        }
-        this.companies = response.objects;
+      .then(res => {
+
+        var response = <HttpResponse<any>> res;
+        if(response.statusText=="OK")
+          this.companies = response.body.data;
+
         switch (this.formMode) {
           case 'ADD':
             this.companyList = this.companies.filter(company => company.isActive == true);

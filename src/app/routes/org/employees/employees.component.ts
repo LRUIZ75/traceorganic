@@ -18,6 +18,7 @@ import {
   Person,
   PeopleService
 } from 'app/services';
+import { HttpResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-org-employees',
@@ -115,9 +116,13 @@ export class OrgEmployeesComponent implements OnInit {
     this.companyService
     .getData()
     .toPromise()
-    .then(resp => {
-      this.companyList = resp.objects;
-      this.companyList = this.companyList.filter(company => company.isActive)
+    .then(res => {
+      var response = <HttpResponse<any>> res;
+
+        if (response.statusText == 'OK') {
+      this.companyList = response.body.data;
+      this.companyList = this.companyList.filter(company => company.isActive)}
+
     });
   }
 

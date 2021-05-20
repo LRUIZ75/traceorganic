@@ -1,3 +1,4 @@
+import { HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Company, CompaniesService } from 'app/services';
@@ -38,6 +39,9 @@ export class AddcompanyComponent implements OnInit {
         lat: [1, [Validators.required]],
         lng: [2, [Validators.required]],
       }),
+      taxPayerCode: [''],
+      countryISOCode: ['NIC'],
+      logo: ['']
     });
 
     if (this.formMode == 'EDIT' && this.initialData) {
@@ -55,12 +59,15 @@ export class AddcompanyComponent implements OnInit {
               lat: position.coords.latitude,
               lng: position.coords.longitude,
             },
+            taxPayerCode: '',
+            countryISOCode: '',
+            logo: ''
           };
           this.companyFormGroup.patchValue(this.initialData as Company);
 
           this.latitude = position.coords.latitude.toString();
           this.longitude = position.coords.longitude.toString();
-          console.log(this.latitude, this.longitude);
+          
         });
       }
     }
@@ -114,7 +121,7 @@ export class AddcompanyComponent implements OnInit {
 
   onSubmit() {
     if (!this.companyFormGroup.valid) {
-      this.toaster.warning('El formulario tiene erorres!');
+      this.toaster.warning('EL FORMULARIO CONTIENE ERRORES');
       return;
     }
 
@@ -126,17 +133,18 @@ export class AddcompanyComponent implements OnInit {
           .updateData(this.initialData._id, this.company)
           .toPromise()
           .then(resp => {
-            if (!resp) {
-              this.toaster.error('Operación fallida!');
-              return;
+            var response = <HttpResponse<any>> resp;
+            if(response.statusText =='OK'){
+              this.company = <Company> response.body.data;
+              this.toaster.success('ACTUALIZADO!');
+              this.changeState('RETRIEVE');
             }
-
-            this.company = <Company>resp.updated;
-            this.toaster.success('Operación exitosa!');
-            this.changeState('RETRIEVE');
+            else {
+              this.toaster.error('NO ACTUALIZADO!');
+            }
           })
           .catch(err => {
-            this.toaster.error(err);
+            this.toaster.error('NO ACTUALIZADO!');
           });
         break;
 
@@ -145,22 +153,23 @@ export class AddcompanyComponent implements OnInit {
           .addData(this.company)
           .toPromise()
           .then(resp => {
-            if (!resp) {
-              this.toaster.error('Operación fallida!');
-              return;
+            var response = <HttpResponse<any>> resp;
+            if(response.ok){
+              this.company = <Company> response.body.data;
+              this.toaster.success('AGREGADO!');
+              this.changeState('RETRIEVE');
             }
-
-            this.company = <Company>resp.created;
-            this.toaster.success('Operación exitosa!');
-            this.changeState('RETRIEVE');
+            else {
+              this.toaster.error('NO AGREGADO!');
+            }
           })
           .catch(err => {
-            this.toaster.error(err);
+            this.toaster.error('NO AGREGADO!');
           });
         break;
 
       default:
-        this.toaster.warning('Se desconoce el modo del formulario');
+        this.toaster.warning('MODO DE EDICIÓN DESCONOCIDO');
     }
   }
 }

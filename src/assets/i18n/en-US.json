@@ -267,6 +267,14 @@
     "can_deactivate": "Proceed to deactivate this record",
     "can_delete": "Proceed to delete this record"
   },
+  "HTTPSTATUS": {
+    "Title500": "Server went wrong!",
+    "Msg500": "Try to refresh in a few moments",
+    "Title404": "Page not found!",
+    "Msg404": "This is not the web page you are looking for.",
+    "Title403": "Permission denied!",
+    "Msg403": "You do not have permission to access the requested data."
+  },
   "AVAILABLE": "AVAILABLE",
   "SERVICING": "SERVICING",
   "ON-DUTY": "ON-DUTY",
