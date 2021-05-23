@@ -47,8 +47,8 @@
                   "with": "src/environments/environment.prod.ts"
                 },
                 {
-                  "replace": "proxy.config.ts",
-                  "with": "proxy.config.prod.ts"
+                  "replace": "proxy.config.js",
+                  "with": "proxy.config.prod.js"
                 }
 
               ],
