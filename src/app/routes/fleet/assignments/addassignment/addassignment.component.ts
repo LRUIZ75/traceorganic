@@ -1,3 +1,4 @@
+import { HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TranslateService } from '@ngx-translate/core';
@@ -78,8 +79,9 @@ export class AddassignmentComponent implements OnInit {
     this.peopleService
       .getData()
       .toPromise()
-      .then(data => {
-        this.personList = data.objects;
+      .then(res => {
+        var response = <HttpResponse<any>>res;
+        if (response.ok) this.personList = response.body.data;
       });
   }
 
@@ -125,10 +127,13 @@ export class AddassignmentComponent implements OnInit {
         }
 
         for (var i = 0; i < this.drivers.length; i++) {
-          var person = <Person> this.personList.find(p => p._id == this.drivers[i].person);
+          var person = <Person>this.personList.find(p => p._id == this.drivers[i].person);
           if (person)
             this.drivers[i].driverDescription =
-              person.names + ' ' + person.lastNames + (this.drivers[i].isExternal == true?" (EXT)": " (EMP)");
+              person.names +
+              ' ' +
+              person.lastNames +
+              (this.drivers[i].isExternal == true ? ' (EXT)' : ' (EMP)');
         }
       })
       .catch(err => {
@@ -163,7 +168,8 @@ export class AddassignmentComponent implements OnInit {
             ' ' +
             this.vehicles[i].model +
             ' ' +
-            this.vehicles[i].year + "]";
+            this.vehicles[i].year +
+            ']';
         }
       })
       .catch(err => {
@@ -214,10 +220,10 @@ export class AddassignmentComponent implements OnInit {
 
             this.assignment = <Assignment>resp.updated;
             this.toaster.success('Operación exitosa!');
-            this.driverService.updateData(this.initialData.driver,{"isAvailable": "true"});
-            this.vehicleService.updateData(this.initialData.vehicle,{"isAvailable": "true"});    
-            this.driverService.updateData(this.assignment.driver,{"isAvailable": "false"});
-            this.vehicleService.updateData(this.assignment.vehicle,{"isAvailable": "false"});
+            this.driverService.updateData(this.initialData.driver, { isAvailable: 'true' });
+            this.vehicleService.updateData(this.initialData.vehicle, { isAvailable: 'true' });
+            this.driverService.updateData(this.assignment.driver, { isAvailable: 'false' });
+            this.vehicleService.updateData(this.assignment.vehicle, { isAvailable: 'false' });
             this.changeState('RETRIEVE');
           })
           .catch(err => {
@@ -236,11 +242,15 @@ export class AddassignmentComponent implements OnInit {
             }
 
             this.assignment = <Assignment>resp.created;
-            this.toaster.success('Operación exitosa!');   
-            this.driverService.updateData(this.assignment.driver,{"isAvailable": "false"})
-            .toPromise().then();
-            this.vehicleService.updateData(this.assignment.vehicle,{"isAvailable": "false"})
-            .toPromise().then();
+            this.toaster.success('Operación exitosa!');
+            this.driverService
+              .updateData(this.assignment.driver, { isAvailable: 'false' })
+              .toPromise()
+              .then();
+            this.vehicleService
+              .updateData(this.assignment.vehicle, { isAvailable: 'false' })
+              .toPromise()
+              .then();
             this.changeState('RETRIEVE');
           })
           .catch(err => {

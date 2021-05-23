@@ -1,7 +1,7 @@
 import { HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Company, CompaniesService } from 'app/services';
+import { Company, CompaniesService, Country, CountriesService } from 'app/services';
 import { ToastrService } from 'ngx-toastr';
 
 @Component({
@@ -15,9 +15,13 @@ export class AddcompanyComponent implements OnInit {
    */
   companyFormGroup: FormGroup;
   company: Company;
+  public countries: Country[];
 
   public latitude: any;
   public longitude: any;
+
+  files: File[] = [];
+  picture: any;
 
   @Output() changeStateEvent = new EventEmitter<string>();
 
@@ -27,10 +31,13 @@ export class AddcompanyComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private companyService: CompaniesService,
+    private countryService: CountriesService,
     private toaster: ToastrService
   ) {}
 
   ngOnInit(): void {
+    this.getCountriesList();
+
     this.companyFormGroup = this.formBuilder.group({
       fullName: ['', [Validators.required, Validators.minLength(2)]],
       shortName: ['', [Validators.required]],
@@ -41,11 +48,25 @@ export class AddcompanyComponent implements OnInit {
       }),
       taxPayerCode: [''],
       countryISOCode: ['NIC'],
-      logo: ['']
+      logo: [''],
     });
 
     if (this.formMode == 'EDIT' && this.initialData) {
       this.companyFormGroup.patchValue(this.initialData as Company);
+
+      if (this.initialData.logo) {
+        this.companyService
+          .getPicture(this.initialData.logo)
+          .toPromise()
+          .then(res => {
+            var response = <HttpResponse<any>>res;
+            var imgFile = new File([response.body], this.initialData.logo, { type: response.headers.get("Content-Type") });
+            this.files.push(imgFile);
+          })
+          .catch(err => {
+            if (err) console.log(err);
+          });
+      }
     }
 
     if (this.formMode == 'ADD') {
@@ -59,42 +80,31 @@ export class AddcompanyComponent implements OnInit {
               lat: position.coords.latitude,
               lng: position.coords.longitude,
             },
-            taxPayerCode: '',
-            countryISOCode: '',
-            logo: ''
+            taxPayerCode: [''],
+            countryISOCode: ['NIC'],
+            logo: [''],
           };
           this.companyFormGroup.patchValue(this.initialData as Company);
 
           this.latitude = position.coords.latitude.toString();
           this.longitude = position.coords.longitude.toString();
-          
         });
       }
     }
   }
 
-  get fullName() {
-    return this.companyFormGroup.get('fullName');
-  }
-
-  get shortName() {
-    return this.companyFormGroup.get('shortName');
-  }
-
-  get lat() {
-    return this.companyFormGroup.get('location').get('lat');
-  }
-
-  set lat(value) {
-    this.companyFormGroup.get('location').get('lat').setValue(value);
-  }
-
-  get lng() {
-    return this.companyFormGroup.get('location').get('lng');
-  }
-
-  set lng(value) {
-    this.companyFormGroup.get('location').get('lng').setValue(value);
+  /**
+   * Obtiene lista de paises
+   */
+  getCountriesList() {
+    this.countryService
+      .getData()
+      .toPromise()
+      .then(res => {
+        var response = <HttpResponse<any>>res;
+        if (response.ok) this.countries = <Country[]>response.body.data;
+        else this.countries = [];
+      });
   }
 
   /**
@@ -132,14 +142,15 @@ export class AddcompanyComponent implements OnInit {
         this.companyService
           .updateData(this.initialData._id, this.company)
           .toPromise()
-          .then(resp => {
-            var response = <HttpResponse<any>> resp;
-            if(response.statusText =='OK'){
-              this.company = <Company> response.body.data;
+          .then(res => {
+            var response = <HttpResponse<any>>res;
+            if (response.ok) {
+              this.company = <Company>response.body.data;
               this.toaster.success('ACTUALIZADO!');
+
+              if (this.files.length > 0 && this.files[0].name != this.company.logo) this.updatePicture(this.company._id);
               this.changeState('RETRIEVE');
-            }
-            else {
+            } else {
               this.toaster.error('NO ACTUALIZADO!');
             }
           })
@@ -152,14 +163,14 @@ export class AddcompanyComponent implements OnInit {
         this.companyService
           .addData(this.company)
           .toPromise()
-          .then(resp => {
-            var response = <HttpResponse<any>> resp;
-            if(response.ok){
-              this.company = <Company> response.body.data;
+          .then(res => {
+            var response = <HttpResponse<any>>res;
+            if (response.ok) {
+              this.company = <Company>response.body.data;
               this.toaster.success('AGREGADO!');
+              if (this.files.length > 0 && this.files[0].name != this.company.logo) this.updatePicture(this.company._id);
               this.changeState('RETRIEVE');
-            }
-            else {
+            } else {
               this.toaster.error('NO AGREGADO!');
             }
           })
@@ -171,5 +182,36 @@ export class AddcompanyComponent implements OnInit {
       default:
         this.toaster.warning('MODO DE EDICIÓN DESCONOCIDO');
     }
+  }
+
+  /**
+   * Updates company logo
+   * @param id Company OID
+   */
+  updatePicture(id: string) {
+    if (!id || !this.files) return;
+    if (this.files.length == 0) return;
+
+    this.companyService
+      .updatePicture(id, this.files[0])
+      .toPromise()
+      .then(res => {
+        var response = <HttpResponse<any>>res;
+        if (!response.ok) this.toaster.error('LOGO NO ACTUALIZADO!');
+      });
+  }
+
+  onSelect(event) {
+    //console.log(event);
+    if (this.files.length > 0) {
+      this.files = [];
+    }
+    this.files.push(...event.addedFiles);
+    //this.companyFormGroup.get('logo').setValue(this.files[0].name);
+  }
+
+  onRemove(event) {
+    this.files = [];
+    this.companyFormGroup.get('logo').setValue('');
   }
 }

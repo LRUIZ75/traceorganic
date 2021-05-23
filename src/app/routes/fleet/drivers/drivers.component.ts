@@ -87,8 +87,10 @@ export class FleetDriversComponent implements OnInit {
     this.personService
       .getData()
       .toPromise()
-      .then(resp => {
-        this.personList = resp.objects;
+      .then(res => {
+        var response = <HttpResponse<any>> res;
+        if(response.ok)
+          this.personList = response.body.data;
       });
   }
 

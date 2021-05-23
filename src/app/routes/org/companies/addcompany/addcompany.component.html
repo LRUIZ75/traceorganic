@@ -1,15 +1,14 @@
 <div fxLayout="row wrap" fxLayoutAlign="center center">
-  <div   fxLayout.lt-md="80" fxLayout.md="50"  fxLayout.lg="40"  fxFlexAlign="center" >
+  <div fxLayout.lt-md="80" fxLayout.md="50" fxLayout.lg="40" fxFlexAlign="center">
     <mat-card class="">
-       <mat-card-title class="mat-title" *ngIf="formMode=='ADD'">
+      <mat-card-title class="mat-title" *ngIf="formMode == 'ADD'">
         {{ 'record_actions.add_new' | translate | titlecase }}:
         {{ 'domain.companies' | translate | titlecase }}
-       </mat-card-title>
-        <mat-card-title class="mat-title" *ngIf="formMode=='EDIT'">
-          {{ 'record_actions.edit' | translate | titlecase }}:
-          {{ 'domain.companies' | translate | titlecase }}
-          </mat-card-title
-      >
+      </mat-card-title>
+      <mat-card-title class="mat-title" *ngIf="formMode == 'EDIT'">
+        {{ 'record_actions.edit' | translate | titlecase }}:
+        {{ 'domain.companies' | translate | titlecase }}
+      </mat-card-title>
       <mat-card-content>
         <form [formGroup]="companyFormGroup">
           <mat-form-field>
@@ -72,7 +71,7 @@
           <mat-form-field>
             <input
               matInput
-              placeholder="{{ 'domain.taxPayerCode' | translate | titlecase }}"
+              placeholder="{{ 'domain.tax_code' | translate | titlecase }}"
               formControlName="taxPayerCode"
             />
             <mat-error *ngIf="companyFormGroup.get('taxPayerCode').hasError('required')">
@@ -81,20 +80,51 @@
           </mat-form-field>
 
           <mat-form-field>
-            <input
-              matInput
-              placeholder="{{ 'domain.countryISOCode' | translate | titlecase }}"
+            <mat-select
+              placeholder="{{ 'domain.country_code' | translate | titlecase }}"
               formControlName="countryISOCode"
-            />
+            >
+              <mat-option *ngFor="let item of countries" [value]="item.cca3">
+                {{ item.name.common }}
+              </mat-option>
+            </mat-select>
+
             <mat-error *ngIf="companyFormGroup.get('countryISOCode').hasError('required')">
               {{ 'validations.required' | translate }}
             </mat-error>
           </mat-form-field>
 
+          <div class="matero-row" fxAlign="center">
+            <div class="matero-col" fxFlex="60">
+              <ngx-dropzone class="custom-dropzone"
+              [accept]="'image/*'"
+              [expandable]="false"
+              [multiple]="false"
+              [maxFileSize]="51200"
+
+              (change)="onSelect($event)">
+                <ngx-dropzone-label>{{ 'domain.logo' | translate| titlecase}}</ngx-dropzone-label>
+                <ngx-dropzone-image-preview
+                  *ngFor="let f of files"
+                  [removable]="true"
+                  (removed)="onRemove(f)"
+                  [file]="f"
+                >
+                  <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                </ngx-dropzone-image-preview>
+              </ngx-dropzone>
+            </div>
+          </div>
         </form>
       </mat-card-content>
       <mat-card-actions align="right">
-        <button *ngIf="formMode == 'ADD'" mat-raised-button color = "default" type="reset" (click)="onReset()">
+        <button
+          *ngIf="formMode == 'ADD'"
+          mat-raised-button
+          color="default"
+          type="reset"
+          (click)="onReset()"
+        >
           {{ 'record_actions.reset' | translate | titlecase }}
         </button>
         <button mat-raised-button color="default" type="cancel" (click)="onCancel()">

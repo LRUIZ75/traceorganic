@@ -2,6 +2,9 @@
 
 export * from './auth.service';
 
+//Geographics Scheme
+export * from './countries.service'
+
 //Security Scheme
 export * from './people.service'
 export * from './users.service';

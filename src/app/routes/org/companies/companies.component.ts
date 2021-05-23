@@ -82,7 +82,7 @@ export class OrgCompaniesComponent implements OnInit {
       .toPromise()
       .then(res => {
         var response = <HttpResponse<any>>res;
-        if (response.statusText == 'OK') {
+        if (response.ok) {
           this.companyList = response.body.data as Company[];
           //this.userList = this.userList.filter(it => it.isActive == true);
         }

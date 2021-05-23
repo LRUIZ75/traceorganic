@@ -1,5 +1,5 @@
 import { catchError } from 'rxjs/internal/operators';
-import { HttpClient, HttpHeaders, HttpErrorResponse, HttpRequest, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse, HttpRequest, HttpResponse, HttpEvent } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
@@ -37,81 +37,102 @@ export interface Person {
 })
 export class PeopleService {
   public endpoint: string;
+  public initOptions: any = {
+    responseType: 'json',
+    withCredentials: true,
+  };
   constructor(
     private http: HttpClient) {
     this.endpoint = environment.apiURL + 'person/';
-    console.log('Conectando a :' + this.endpoint);
-  }
-
-  private handleError(error: HttpErrorResponse): any {
-    if (error.error instanceof ErrorEvent) {
-      console.error('Ocurrió un error:', error.status, error.error.message);
-    } else {
-      console.error(
-        `El backend devolvió =>
-    ${error.message}`
-      );
-      console.debug(JSON.stringify(error.error));
-    }
-    return throwError(`${error.status} ` + JSON.stringify(error.error));
-  }
-
-  private extractData(res: HttpResponse<any>): any {
-    const body = res;
-    return body || {};
+    //console.log('Conectando a :' + this.endpoint);
   }
 
   /**
-   * Adds new person by API
-   * @param  {any} body -New data for person
+   * Add new Person
+   * @param body Data for new Person
+   * @returns New Person Data
    */
-  addData(body: any): Observable<any> {
-    return this.http
-      .post(this.endpoint, body)
-      .pipe(map(this.extractData), catchError(this.handleError));
+   addData(body: any): Observable<HttpEvent<unknown> | HttpErrorResponse> {
+    const req = new HttpRequest('POST', `${this.endpoint}`, body, this.initOptions);
+    return this.http.request(req).pipe();
   }
 
-  getData(): Observable<any> {
-    return this.http.get(this.endpoint).pipe(map(this.extractData), catchError(this.handleError));
+  /**
+   * Get Person data
+   * @param id Person ID
+   * @returns Person Data or Array
+   */
+  getData(id?: string): Observable<HttpEvent<unknown> | HttpErrorResponse> {
+    id = id === undefined ? '' : id;
+    const req = new HttpRequest('GET', `${this.endpoint}${id}`, null, this.initOptions);
+    return this.http.request(req).pipe();
   }
 
-  getDataById(id: string): Observable<any> {
-    return this.http
-      .get(this.endpoint + id)
-      .pipe(map(this.extractData), catchError(this.handleError));
+  /**
+   * Update Person data
+   * @param id Person ID
+   * @param body Data to update
+   * @returns Updated Person data
+   */
+  updateData(id: string, body: any): Observable<HttpEvent<unknown> | HttpErrorResponse> {
+    id = id === undefined ? '' : id;
+    const req = new HttpRequest('PUT', `${this.endpoint}${id}`, body, this.initOptions);
+    return this.http.request(req).pipe();
   }
 
-  getPicture(id: string): Observable<any> {
-    return this.http
-      .get(this.endpoint + 'picture/' + id)
-      .pipe(map(this.extractData), catchError(this.handleError));
+  /**
+   * Delete Person Data
+   * @param id Person ID
+   * @returns Deleted Person data
+   */
+  deleteData(id: string): Observable<HttpEvent<unknown> | HttpErrorResponse> {
+    id = id === undefined ? '' : id;
+    const req = new HttpRequest('DELETE', `${this.endpoint}${id}`, null, this.initOptions);
+    return this.http.request(req).pipe();
   }
 
-  updateData(id: string, body: any): Observable<any> {
-    return this.http
-      .put(this.endpoint + id, body)
-      .pipe(map(this.extractData), catchError(this.handleError));
+  /**
+   * Deactivate Person (isActive = false)
+   * @param id Person ID
+   * @returns Deactivated Person data
+   */
+  deactivateData(id: string): Observable<HttpEvent<unknown> | HttpErrorResponse> {
+    id = id === undefined ? '' : id;
+    var body = { isActive: false };
+    return this.updateData(id, body);
   }
 
-  updatePicture(id: string, picture: File): Observable<any> {
+  /**
+   * Get image object from field name
+   * @param filename Picture file name
+   * @returns image object
+   */
+  getPicture(filename: string): Observable<HttpEvent<unknown> | HttpErrorResponse> {
+    filename = filename === undefined ? '' : filename;
+    var initOptions: any = {
+      responseType: 'blob',
+      withCredentials: false,
+    };
+    const req = new HttpRequest('GET', `${this.endpoint}picture/${filename}`,initOptions);
+    return this.http.request(req).pipe();
+  }
+
+  /**
+   * Update picture into picture field
+   * @param fieldName picture
+   * @param id Person OID
+   * @param picture File
+   * @returns Success: path of updated image
+   */
+  updatePicture(id: string, picture: File, fieldName: string = 'logo'): Observable<any> {
     let formData: FormData = new FormData();
     formData.append('picture', picture);
-    const req = new HttpRequest('PUT', `${this.endpoint}picture/${id}`, formData, {
-      reportProgress: true,
-      responseType: 'json'
-    });
-    return this.http.request(req).pipe(map(this.extractData), catchError(this.handleError));
-  }
 
-  deleteData(id: string): Observable<any> {
-    return this.http
-      .delete(this.endpoint + id)
-      .pipe(map(this.extractData), catchError(this.handleError));
-  }
-
-  deactivateData(id: string): Observable<any> {
-    return this.http
-      .delete(this.endpoint + id)
-      .pipe(map(this.extractData), catchError(this.handleError));
+    const req = new HttpRequest(
+      'PUT',
+      `${this.endpoint}${fieldName}/${id}`,
+      formData, this.initOptions
+    );
+    return this.http.request(req).pipe();
   }
 }

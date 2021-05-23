@@ -102,12 +102,10 @@ export class AddvehicleComponent implements OnInit {
     this.personService
       .getData()
       .toPromise()
-      .then(response => {
-        if (!response) {
-          this.toaster.error('No hay datos de personas!');
-          return;
-        }
-        this.people = response.objects;
+      .then(res => {
+        var response = <HttpResponse<any>> res;
+        if(response.ok)
+          this.people = response.body.data;
 
         this.personList = this.people;
       })

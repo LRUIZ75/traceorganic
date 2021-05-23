@@ -107,8 +107,10 @@ export class OrgEmployeesComponent implements OnInit {
     this.peopleService
       .getData()
       .toPromise()
-      .then(resp => {
-        this.peopleList = resp.objects;
+      .then(res => {
+        var response = <HttpResponse<any>> res;
+        if(response.ok)
+          this.peopleList = response.body.data;
       });
   }
 

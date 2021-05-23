@@ -1,3 +1,4 @@
+import { HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CompaniesService, Person, PeopleService } from 'app/services';
@@ -58,13 +59,6 @@ export class AddpeopleComponent implements OnInit {
     
   }
 
-  /*   get fullName() {
-    return this.personFormGroup.get('fullName');
-  }
-
-  get shortName() {
-    return this.personFormGroup.get('shortName');
-  } */
 
   /**
    * Resetea el valor de todos los campos
@@ -101,16 +95,14 @@ export class AddpeopleComponent implements OnInit {
         this.peopleService
           .updateData(this.initialData._id, this.person)
           .toPromise()
-          .then(resp => {
-            if (!resp) {
-              this.toaster.error('Operación fallida!');
-              return;
-            }
+          .then(res => {
+            var response = <HttpResponse<any>> res;
 
-            this.newPerson = <Person> resp.updated;
-            if (this.files.length > 0) //solicita nueva imagen en modo editar
+            if(response.ok)
+              this.newPerson = <Person> response.body.data;
+            if (this.files.length > 0 && this.initialData.picture != this.files[0].name) //solicita nueva imagen en modo editar
             this.updatePicture(this.newPerson._id);
-            this.toaster.success('Operación exitosa!');
+            this.toaster.success('MODIFICADO!');
             this.changeState('RETRIEVE');
           })
           .catch(err => {
@@ -122,16 +114,14 @@ export class AddpeopleComponent implements OnInit {
         this.peopleService
           .addData(this.person)
           .toPromise()
-          .then(resp => {
-            if (!resp) {
-              this.toaster.error('Operación fallida!');
-              return;
-            }
-
-            this.newPerson = <Person> resp.created;
+          .then(res => {
+            var response = <HttpResponse<any>> res;
+            if(response.ok)
+              this.newPerson = <Person> response.body.data;
+              
             if(this.files.length > 0) //agregó una foto
             this.updatePicture(this.newPerson._id);
-            this.toaster.success('Operación exitosa!');
+            this.toaster.success('AGREGADO');
             this.changeState('RETRIEVE');
           })
           .catch(err => {
@@ -171,5 +161,10 @@ export class AddpeopleComponent implements OnInit {
     }
     this.files.push(...event.addedFiles);
     this.personFormGroup.get('picture').setValue(this.files[0].name);
+  }
+
+  onRemove(event) {
+    this.files =[];
+    this.personFormGroup.get('picture').setValue('');
   }
 }

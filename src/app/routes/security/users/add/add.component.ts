@@ -1,3 +1,4 @@
+import { HttpResponse } from '@angular/common/http';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import {
   FormGroup,
@@ -140,10 +141,12 @@ export class AddComponent implements OnInit {
     await this.peopleService
       .addData(data)
       .toPromise()
-      .then(resp => {
-        this.newPerson = <Person>resp.created;
+      .then(res => {
+        var response = <HttpResponse<any>> res;
+        if(response.ok) 
+          this.newPerson = <Person> response.body.data;
         if (!this.newPerson) {
-          this.toaster.error('Error agregando datos de persona');
+          this.toaster.error('NO AGREGADO');
           return;
         }
       })

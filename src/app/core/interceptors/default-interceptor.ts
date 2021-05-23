@@ -44,8 +44,18 @@ export class DefaultInterceptor implements HttpInterceptor {
         'Accept': 'application/json',
         'Accept-Language': this.settings.language,
       };
+
       //newReq = req.clone({ url, setHeaders: headers});
-      console.log('Headers: ' + JSON.stringify(headers));
+      //console.log('Headers: ' + JSON.stringify(headers));
+
+    } else if (url.includes('/picture/')) {
+      headers = {
+        'Accept': 'image/*',
+        'Accept-Language': this.settings.language,
+      };
+
+      //return next.handle(req);
+      
     } else {
       headers = {
         'Accept': 'application/json',
@@ -53,7 +63,6 @@ export class DefaultInterceptor implements HttpInterceptor {
         'Authorization': `Bearer ${this.token.get().token}`,
       };
 
-      console.log('Headers: ' + JSON.stringify(headers));
     }
 
     const newReq = req.clone({ setHeaders: headers, withCredentials: true });
@@ -76,7 +85,10 @@ export class DefaultInterceptor implements HttpInterceptor {
 
       // failure: { status: 'error'|'**' message: 'failure' }
       // success: { status: 'ok',  message?: ' message', data: {}, token?: 'JWT Token'}
-
+      if(event.ok)
+        return of(event);
+      if(event.statusText == "OK")
+        return of(event);
       if (body && body.status !== 'ok') {
         if (body.message && body.message !== '') {
           this.toastr.error(body.msg);
@@ -92,13 +104,15 @@ export class DefaultInterceptor implements HttpInterceptor {
 
   private handleErrorReq(error: HttpErrorResponse): Observable<never> {
     switch (error.status) {
+      case 304:
+      case 200:
+        break; 
       case 401:
         this.goto(`/auth/login`);
         break;
       case 403:
       case 404:
       case 500:
-
         if (error.url.includes('/api/'))
           this.toastr.error(error.error.message || `${error.status} ${error.statusText}`);
         else this.goto(`/sessions/${error.status}`);
@@ -107,6 +121,7 @@ export class DefaultInterceptor implements HttpInterceptor {
       default:
         if (error instanceof HttpErrorResponse) {
           this.toastr.error(error.message || `${error.status} ${error.statusText}`);
+          this.toastr.error(`${error}`);
         }
         break;
     }

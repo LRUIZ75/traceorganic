@@ -1,9 +1,4 @@
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpEvent,
-  HttpRequest,
-} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpEvent, HttpRequest } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { environment } from '@env/environment';
@@ -28,9 +23,9 @@ export interface Company {
 export class CompaniesService {
   public endpoint: string;
   public initOptions: any = {
-    "responseType": "json",
-    "withCredentials": true
-    };
+    responseType: 'json',
+    withCredentials: true,
+  };
 
   constructor(private http: HttpClient) {
     this.endpoint = environment.apiURL + 'company/';
@@ -53,7 +48,7 @@ export class CompaniesService {
    * @returns Company Data or Array
    */
   getData(id?: string): Observable<HttpEvent<unknown> | HttpErrorResponse> {
-    id = (id === undefined)?'':id;
+    id = id === undefined ? '' : id;
     const req = new HttpRequest('GET', `${this.endpoint}${id}`, null, this.initOptions);
     return this.http.request(req).pipe();
   }
@@ -65,7 +60,7 @@ export class CompaniesService {
    * @returns Updated company data
    */
   updateData(id: string, body: any): Observable<HttpEvent<unknown> | HttpErrorResponse> {
-    id = (id === undefined)?'':id;
+    id = id === undefined ? '' : id;
     const req = new HttpRequest('PUT', `${this.endpoint}${id}`, body, this.initOptions);
     return this.http.request(req).pipe();
   }
@@ -76,7 +71,7 @@ export class CompaniesService {
    * @returns Deleted company data
    */
   deleteData(id: string): Observable<HttpEvent<unknown> | HttpErrorResponse> {
-    id = (id === undefined)?'':id;
+    id = id === undefined ? '' : id;
     const req = new HttpRequest('DELETE', `${this.endpoint}${id}`, null, this.initOptions);
     return this.http.request(req).pipe();
   }
@@ -87,8 +82,42 @@ export class CompaniesService {
    * @returns Deactivated Company data
    */
   deactivateData(id: string): Observable<HttpEvent<unknown> | HttpErrorResponse> {
-    id = (id === undefined)?'':id;
-    var body = {isActive: false};
-    return this.updateData(id,body);
+    id = id === undefined ? '' : id;
+    var body = { isActive: false };
+    return this.updateData(id, body);
+  }
+
+  /**
+   * Get image object from field name
+   * @param filename Logo file name
+   * @returns image object
+   */
+  getPicture(filename: string): Observable<HttpEvent<unknown> | HttpErrorResponse> {
+    filename = filename === undefined ? '' : filename;
+    var initOptions: any = {
+      responseType: 'blob',
+      withCredentials: false,
+    };
+    const req = new HttpRequest('GET', `${this.endpoint}picture/${filename}`,initOptions);
+    return this.http.request(req).pipe();
+  }
+
+  /**
+   * Update picture into logo field
+   * @param fieldName logo
+   * @param id Company OID
+   * @param picture File
+   * @returns Success: path of updated image
+   */
+  updatePicture(id: string, picture: File, fieldName: string = 'logo'): Observable<any> {
+    let formData: FormData = new FormData();
+    formData.append('picture', picture);
+
+    const req = new HttpRequest(
+      'PUT',
+      `${this.endpoint}${fieldName}/${id}`,
+      formData, this.initOptions
+    );
+    return this.http.request(req).pipe();
   }
 }
