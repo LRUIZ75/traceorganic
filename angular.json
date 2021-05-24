@@ -45,12 +45,7 @@
                 {
                   "replace": "src/environments/environment.ts",
                   "with": "src/environments/environment.prod.ts"
-                },
-                {
-                  "replace": "proxy.config.js",
-                  "with": "proxy.config.prod.js"
                 }
-
               ],
               "optimization": true,
               "outputHashing": "all",
@@ -92,7 +87,7 @@
           "configurations": {
             "production": {
               "browserTarget": "traceorganic:build:production"
-              ,"proxyConfig": "proxy.config.js"
+              ,"proxyConfig": "proxy.config.prod.js"
             },
             "hmr": {
               "hmr": true,
