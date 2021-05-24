@@ -1,5 +1,5 @@
 export const environment = {
-  SERVER_ORIGIN: '',
+  SERVER_ORIGIN: 'https://traceorganic.herokuapp.com',
   production: true,
   useHash: false,
   hmr: false,
