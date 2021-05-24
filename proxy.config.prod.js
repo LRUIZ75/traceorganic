@@ -5,7 +5,7 @@ const PROXY_CONFIG = {
     changeOrigin: true,
     secure: true,
     logLevel: 'debug',
-/*     onProxyReq: (proxyReq, req, res) => {
+    onProxyReq: (proxyReq, req, res) => {
       // const cookieMap = {
       //   SID: '',
       // };
@@ -16,7 +16,7 @@ const PROXY_CONFIG = {
       //   }
       // }
       // proxyReq.setHeader('cookie', cookie);
-    }, */
+    },
   },
 };
 
