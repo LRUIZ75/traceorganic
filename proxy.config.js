@@ -1,5 +1,5 @@
 const PROXY_CONFIG = {
-  '/api/*': {
+  '/api/**': {
 
     target: 'http://localhost:5000',
     changeOrigin: false,

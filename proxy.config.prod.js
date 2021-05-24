@@ -1,9 +1,9 @@
 const PROXY_CONFIG = {
-  '/api/*': {
+  '/api/**': {
 
     target: 'https://traceorganic-api.herokuapp.com',
     changeOrigin: true,
-    secure: true,
+    secure: false,
     logLevel: 'debug',
     onProxyReq: (proxyReq, req, res) => {
       // const cookieMap = {
