@@ -64,9 +64,9 @@ export class DefaultInterceptor implements HttpInterceptor {
       };
 
     }
-
-    const newReq = req.clone({ setHeaders: headers, withCredentials: true });
-
+    
+    const newReq = req.clone({ setHeaders: headers, withCredentials: true, url: url });
+    
     //return next.handle(newReq);
 
     return next.handle(newReq).pipe(
