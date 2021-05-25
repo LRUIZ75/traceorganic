@@ -1,19 +1,19 @@
-import { catchError } from 'rxjs/internal/operators';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { HttpClient, HttpErrorResponse, HttpEvent, HttpRequest } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { environment } from '@env/environment';
 
 export interface User {
-  name: string,
-  email: string,
-  salt: string,
-  password: string,
-  emailVerified: boolean,
-  isActive: boolean,
-  roles: string[],
-  person: string,
+  username: string;
+  password: string;
+  person: string;
+  email: string;
+  isVerifiedEmail: boolean;
+  creationDate: Date;
+  roles: string[];
+  company: string;
+  refreshAccessToken: string;
+  isActive: boolean;
 }
 
 @Injectable({
@@ -21,65 +21,68 @@ export interface User {
 })
 export class UsersService {
   public endpoint: string;
+  public initOptions: any = {
+    responseType: 'json',
+    withCredentials: true,
+  };
 
   constructor(private http: HttpClient) {
-    this.endpoint = environment.apiURL + 'login/';
-    console.log('Conectando a :' + this.endpoint);
-  }
-
-  private handleError(error: HttpErrorResponse): any {
-    if (error.error instanceof ErrorEvent) {
-      console.error('Ocurrió un error:', error.status, error.error.message);
-    } else {
-      console.error(
-        `El backend devolvió =>
-    ${error.message}`
-      );
-      console.debug(JSON.stringify(error.error));
-    }
-    return throwError(`${error.status} ` + JSON.stringify(error.error));
-  }
-
-  private extractData(res: Response): any {
-    const body = res;
-    return body || {};
+    this.endpoint = environment.apiURL + 'user/';
+    //console.log('Conectando a :' + this.endpoint);
   }
 
   /**
-   * Adds new user by API
-   * @param  {any} body -New data for user
+   * Add new User
+   * @param body Data for new User
+   * @returns New User Data
    */
-  addData(body: any): Observable<any> {
-    return this.http
-      .post(this.endpoint, body)
-      .pipe(map(this.extractData), catchError(this.handleError));
+  addData(body: any): Observable<HttpEvent<unknown> | HttpErrorResponse> {
+    const req = new HttpRequest('POST', `${this.endpoint}`, body, this.initOptions);
+    return this.http.request(req).pipe();
   }
 
-  getData(): Observable<any> {
-    return this.http.get(this.endpoint).pipe(map(this.extractData), catchError(this.handleError));
+  /**
+   * Get User data
+   * @param id User ID
+   * @returns User Data or Array
+   */
+  getData(id?: string): Observable<HttpEvent<unknown> | HttpErrorResponse> {
+    id = id === undefined ? '' : id;
+    const req = new HttpRequest('GET', `${this.endpoint}${id}`, null, this.initOptions);
+    return this.http.request(req).pipe();
   }
 
-  getDataById(id: string): Observable<any> {
-    return this.http
-      .get(this.endpoint + id)
-      .pipe(map(this.extractData), catchError(this.handleError));
+  /**
+   * Update User data
+   * @param id User ID
+   * @param body Data to update
+   * @returns Updated User data
+   */
+  updateData(id: string, body: any): Observable<HttpEvent<unknown> | HttpErrorResponse> {
+    id = id === undefined ? '' : id;
+    const req = new HttpRequest('PUT', `${this.endpoint}${id}`, body, this.initOptions);
+    return this.http.request(req).pipe();
   }
 
-  updateData(id: string, body: any): Observable<any> {
-    return this.http
-      .put(this.endpoint + id, body)
-      .pipe(map(this.extractData), catchError(this.handleError));
+  /**
+   * Delete User Data
+   * @param id User ID
+   * @returns Deleted User data
+   */
+  deleteData(id: string): Observable<HttpEvent<unknown> | HttpErrorResponse> {
+    id = id === undefined ? '' : id;
+    const req = new HttpRequest('DELETE', `${this.endpoint}${id}`, null, this.initOptions);
+    return this.http.request(req).pipe();
   }
 
-  deleteData(id: string): Observable<any> {
-    return this.http
-      .delete(this.endpoint + id)
-      .pipe(map(this.extractData), catchError(this.handleError));
-  }
-
-  deactivateData(id: string): Observable<any> {
-    return this.http
-      .delete(this.endpoint + id)
-      .pipe(map(this.extractData), catchError(this.handleError));
+  /**
+   * Deactivate User (isActive = false)
+   * @param id User ID
+   * @returns Deactivated User data
+   */
+  deactivateData(id: string): Observable<HttpEvent<unknown> | HttpErrorResponse> {
+    id = id === undefined ? '' : id;
+    var body = { isActive: false };
+    return this.updateData(id, body);
   }
 }

@@ -35,6 +35,7 @@ import { DataTableModule } from 'ornamentum';
     SharedModule,
     FormlyConfigModule.forRoot(),
     ToastrModule.forRoot(),
+    
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
@@ -42,8 +43,9 @@ import { DataTableModule } from 'ornamentum';
         deps: [HttpClient],
       },
     }),
-    DataTableModule.forRoot(),
+
     NoopAnimationsModule,
+    DataTableModule.forRoot(),
   ],
   providers: [httpInterceptorProviders, appInitializerProviders],
   bootstrap: [AppComponent],

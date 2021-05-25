@@ -2,10 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CdkDragStart } from '@angular/cdk/drag-drop';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
-import { MtxGridColumn } from '@ng-matero/extensions';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confirm-dialog.component';
 
 //Import services
-import { Company, CompaniesService, PeopleService, Person } from 'app/services';
+import { DataTableTranslations } from 'ornamentum';
+import { HttpResponse } from '@angular/common/http';
+import { PeopleService, Person } from 'app/services';
 
 @Component({
   selector: 'app-security-people',
@@ -14,136 +17,77 @@ import { Company, CompaniesService, PeopleService, Person } from 'app/services';
   providers: [PeopleService],
 })
 export class SecurityPeopleComponent implements OnInit {
-  columns: MtxGridColumn[] = [
-    {
-      header: this.translate.stream('Id'),
-      field: '_id',
-      hide: true,
-      sortable: true,
-    },
-    {
-      header: this.translate.stream('domain.names'),
-      field: 'names',
-      sortable: true,
-    },
-    {
-      header: this.translate.stream('domain.lastnames'),
-      field: 'lastNames',
-      sortable: true,
-    },
-    {
-      header: this.translate.stream('domain.citizenid'),
-      field: 'citizenId',
-      sortable: true,
-    },
-    { header: this.translate.stream('domain.phone'), field: 'phone', sortable: true },
-    { header: this.translate.stream('domain.mobile'), field: 'mobile', sortable: true },
-    {
-      header: this.translate.stream('domain.isuser'),
-      field: 'isUser',
-      sortable: true,
-      type: 'boolean',
-    },
-    {
-      header: this.translate.stream('domain.isemployee'),
-      field: 'isEmployee',
-      sortable: true,
-      type: 'boolean',
-    },
-    {
-      header: this.translate.stream('domain.isclient'),
-      field: 'isClient',
-      sortable: true,
-      type: 'boolean',
-    },
-    {
-      header: this.translate.stream('table_kitchen_sink.operation'),
-      field: 'operation',
-      width: '120px',
-      pinned: 'right',
-      right: '0px',
-      type: 'button',
-      buttons: [
-        {
-          type: 'icon',
-          icon: 'edit',
-          tooltip: this.translate.stream('table_kitchen_sink.edit'),
-          click: record => this.edit(record),
-        },
-        {
-          color: 'warn',
-          icon: 'delete',
-          text: this.translate.stream('table_kitchen_sink.delete'),
-          tooltip: this.translate.stream('table_kitchen_sink.delete'),
-          pop: true,
-          popTitle: this.translate.stream('table_kitchen_sink.confirm_delete'),
-          popCloseText: this.translate.stream('table_kitchen_sink.close'),
-          popOkText: this.translate.stream('table_kitchen_sink.ok'),
-          click: record => this.delete(record),
-        },
-      ],
-    },
-  ];
-  isLoading = true;
-
-  multiSelectable = false;
-  rowSelectable = true;
-  hideRowSelectionCheckbox = false;
-  showToolbar = false;
-  columnHideable = true;
-  columnMovable = true;
-  rowHover = true;
-  rowStriped = true;
-  showPaginator = true;
-  expandable = false;
-
   /* Variables locales */
 
   public currentState: string = 'RETRIEVE';
   public selected: Person;
 
-  public peopleList: any[] = [];
+  public peopleList: any[];
+  
   public title: string;
   dragging = false;
   opened = false;
 
+  public dataTableTranslations: DataTableTranslations;
+
   constructor(
     public peopleService: PeopleService,
     public translate: TranslateService,
-    public toaster: ToastrService
+    public toaster: ToastrService,
+    private confirmDialog: MatDialog
   ) {
     this.title = this.translate.instant('domain.people');
     this.getList();
   }
 
+  getTitle() {
+    this.title = this.translate.instant('domain.people');
+
+    return this.title;
+  }
+
   ngOnInit() {
-    if ('geolocation' in navigator) {
+/*     if ('geolocation' in navigator) {
       console.log('geolocation is available');
     } else {
       console.log('geolocation is NOT available');
-    }
+    } */
+  }
+
+  getDataTableTranslations(): DataTableTranslations {
+    this.dataTableTranslations = {
+      pagination: {
+        limit: this.translate.instant('pagination.limit'),
+        rangeKey: this.translate.instant('pagination.records'),
+        rangeSeparator: this.translate.instant('pagination.of'),
+        nextTooltip: this.translate.instant('pagination.next'),
+        previousTooltip: this.translate.instant('pagination.previous'),
+        lastTooltip: this.translate.instant('pagination.last'),
+        firstTooltip: this.translate.instant('pagination.first'),
+      },
+      noDataMessage: this.translate.instant('notifications.nodata'),
+      dropdownFilter: {
+        filterPlaceholder: this.translate.instant('record_actions.search'),
+        selectPlaceholder: this.translate.instant('record_actions.search'),
+      },
+      columnSelector: { header: '>>' },
+    };
+    return this.dataTableTranslations;
   }
 
   getList() {
-    this.isLoading = false;
-    this.peopleService.getData().subscribe(
-      res => {
-        if (res) {
-          var jsonResponse = JSON.stringify(res);
-          var response = JSON.parse(jsonResponse);
-          if (response.status != 'ok') return;
-          this.peopleList = response.objects;
-          //this.userList = this.userList.filter(it => it.isActive == true);
-        }
-      },
-      err => {
-        if (err.substring(0, 3) != '404') {
-          var msg = this.translate.instant('record_actions.error_occurred');
-          this.toaster.error(err);
-        }
-      }
-    );
-    this.isLoading=true;
+    this.peopleService
+      .getData()
+      .toPromise()
+      .then(res => {
+        var response = <HttpResponse<any>>res;
+        if (response.ok || response.body.status == "ok") 
+          this.peopleList = response.body.data;// as Person[]
+        else this.peopleList =[];
+      })
+      .catch(err =>{
+        this.toaster.error(err);
+      });
   }
 
   handleDragStart(event: CdkDragStart): void {
@@ -166,29 +110,47 @@ export class SecurityPeopleComponent implements OnInit {
     this.currentState = 'EDIT';
   }
 
-  disableDelete(record): boolean
-    {return record.isEmployee || record.isUser || record.isClient;}
+  confirmDelete(selected) {
+    const confirmDialog = this.confirmDialog.open(ConfirmDialogComponent, {
+      data: {
+        title: this.translate.instant('record_actions.delete'),
+        message:
+          this.translate.instant('notifications.can_delete') +
+          ': ' +
+          selected.names +
+          ' ' +
+          selected.lastNames +
+          ' ?',
+        button1Text: this.translate.instant('buttons.yes').toUpperCase(),
+        button2Text: this.translate.instant('buttons.no').toUpperCase(),
+      },
+    });
+
+    //Ejemplo de un confirmDialog sin data injection => Versión básica
+    //const confirmDialog = this.confirmDialog.open(ConfirmDialogComponent);
+
+    confirmDialog.afterClosed().subscribe(result => {
+      if (result == true) this.delete(selected);
+    });
+  }
 
   delete(selected) {
     this.selected = selected;
-    if(this.selected.isUser || this.selected.isDriver) {
-      this.toaster.warning("Operación no permitida. El objeto tiene relaciones!");
-      return;
-    }
+
     this.peopleService
       .deleteData(selected._id)
       .toPromise()
       .then(deleted => {
         if (deleted) {
-          this.toaster.success('Operación exitosa!');
+          this.toaster.success('DESACTIVADO!');
           this.getList();
         } else {
-          this.toaster.error('Operación fallida!');
+          this.toaster.error('NO DESACTIVADO!');
           return;
         }
       })
       .catch(err => {
-        this.toaster.error(err);
+        this.toaster.error('NO DESACTIVADO!');
         return;
       });
   }
@@ -199,14 +161,10 @@ export class SecurityPeopleComponent implements OnInit {
   }
 
   changeSelect(e: any) {
-    this.selected = <Person>e[0];
+    console.log(e);
   }
 
   changeSort(e: any) {
     console.log(e);
-  }
-
-  enableRowExpandable() {
-    this.columns[0].showExpand = this.expandable;
   }
 }

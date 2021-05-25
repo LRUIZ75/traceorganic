@@ -1,7 +1,5 @@
-import { catchError } from 'rxjs/internal/operators';
-import { HttpClient, HttpHeaders, HttpErrorResponse, HttpRequest, HttpResponse, HttpEvent } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { HttpClient, HttpErrorResponse, HttpRequest, HttpEvent } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { environment } from '@env/environment';
 
@@ -26,7 +24,7 @@ export interface Person {
     idNumber: string,
     genre: Genre | string,
     mobile: string,
-    birthDate: string,    
+    birthDate: Date,    
     picture: string,
     isUser: boolean,
     isDriver: boolean
@@ -124,7 +122,7 @@ export class PeopleService {
    * @param picture File
    * @returns Success: path of updated image
    */
-  updatePicture(id: string, picture: File, fieldName: string = 'logo'): Observable<any> {
+  updatePicture(id: string, picture: File, fieldName: string = 'picture'): Observable<any> {
     let formData: FormData = new FormData();
     formData.append('picture', picture);
 

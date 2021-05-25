@@ -39,6 +39,7 @@ const MODULES = [
   ToastrModule,
   TranslateModule,
   NgxDropzoneModule,
+  
 ];
 const COMPONENTS = [
   BreadcrumbComponent, 
@@ -51,7 +52,13 @@ const PIPES = [SafeUrlPipe, ToObservablePipe];
 
 @NgModule({
   declarations: [...COMPONENTS, ...COMPONENTS_DYNAMIC, ...DIRECTIVES, ...PIPES, ],
-  imports: [CommonModule, FormsModule, RouterModule, ReactiveFormsModule, ...MODULES],
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    RouterModule, 
+    ReactiveFormsModule,
+     ...MODULES
+    ],
   exports: [
     CommonModule,
     FormsModule,

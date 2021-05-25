@@ -11,7 +11,6 @@ import { AdddepartmentComponent } from './departments/adddepartment/adddepartmen
 import { AddjobpositionComponent } from './jobpositions/addjobposition/addjobposition.component';
 import { AddemployeeComponent } from './employees/addemployee/addemployee.component';
 import { AdddcComponent } from './dcs/adddc/adddc.component';
-import { DataTableModule } from 'ornamentum';
 
 const COMPONENTS = [OrgCompaniesComponent, OrgDepartmentsComponent, OrgJobpositionsComponent, OrgEmployeesComponent, OrgDcsComponent];
 const COMPONENTS_DYNAMIC = [];
@@ -20,7 +19,6 @@ const COMPONENTS_DYNAMIC = [];
   imports: [
     SharedModule,
     OrgRoutingModule,
-    DataTableModule.forRoot()
   ],
   declarations: [
     ...COMPONENTS,

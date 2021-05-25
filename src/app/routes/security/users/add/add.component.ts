@@ -12,6 +12,7 @@ import { MtxFormGroupModule } from '@ng-matero/extensions';
 import { PeopleService, Person } from 'app/services/people.service';
 import { User, UsersService } from 'app/services/users.service';
 import { ToastrService } from 'ngx-toastr';
+import { resolveTypeReferenceDirective } from 'typescript';
 
 @Component({
   selector: 'users-add',
@@ -142,9 +143,8 @@ export class AddComponent implements OnInit {
       .addData(data)
       .toPromise()
       .then(res => {
-        var response = <HttpResponse<any>> res;
-        if(response.ok) 
-          this.newPerson = <Person> response.body.data;
+        var response = <HttpResponse<any>>res;
+        if (response.ok) this.newPerson = <Person>response.body.data;
         if (!this.newPerson) {
           this.toaster.error('NO AGREGADO');
           return;
@@ -154,7 +154,6 @@ export class AddComponent implements OnInit {
         this.toaster.error(err);
         return;
       });
-
 
     // Set paramaters for updatePicture and
     if (this.files.length) {
@@ -167,9 +166,6 @@ export class AddComponent implements OnInit {
           return;
         });
     }
-
-    
-
 
     await this.peopleService
       .updatePicture(this.newPerson._id, this.files[0])
@@ -195,8 +191,9 @@ export class AddComponent implements OnInit {
     await this.userService
       .addData(data)
       .toPromise()
-      .then(resp => {
-        this.newUser = <User>resp.created;
+      .then(res => {
+        var response = <HttpResponse<any>>res;
+        if (response.ok) this.newUser = <User>response.body.data;
 
         if (!this.newUser) {
           this.toaster.error('Error agregando datos de cuenta');

@@ -49,6 +49,8 @@ import { MatMomentDatetimeModule } from '@mat-datetimepicker/moment';
 
 import { materialProviders } from './material-config';
 
+import {DataTableModule} from 'ornamentum';
+
 @NgModule({
   exports: [
     A11yModule,
@@ -96,6 +98,7 @@ import { materialProviders } from './material-config';
     MatTreeModule,
     MatMomentDatetimeModule,
     MatDatetimepickerModule,
+    DataTableModule
   ],
   providers: [materialProviders],
 })
