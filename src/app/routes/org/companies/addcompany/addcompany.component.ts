@@ -60,7 +60,9 @@ export class AddcompanyComponent implements OnInit {
           .toPromise()
           .then(res => {
             var response = <HttpResponse<any>>res;
-            var imgFile = new File([response.body], this.initialData.logo, { type: response.headers.get("Content-Type") });
+            var imgFile = new File([response.body], this.initialData.logo, {
+              type: response.headers.get('Content-Type'),
+            });
             this.files.push(imgFile);
           })
           .catch(err => {
@@ -148,7 +150,8 @@ export class AddcompanyComponent implements OnInit {
               this.company = <Company>response.body.data;
               this.toaster.success('ACTUALIZADO!');
 
-              if (this.files.length > 0 && this.files[0].name != this.company.logo) this.updatePicture(this.company._id);
+              if (this.files.length > 0 && this.files[0].name != this.company.logo)
+                this.updatePicture(this.company._id);
               this.changeState('RETRIEVE');
             } else {
               this.toaster.error('NO ACTUALIZADO!');
@@ -168,7 +171,8 @@ export class AddcompanyComponent implements OnInit {
             if (response.ok) {
               this.company = <Company>response.body.data;
               this.toaster.success('AGREGADO!');
-              if (this.files.length > 0 && this.files[0].name != this.company.logo) this.updatePicture(this.company._id);
+              if (this.files.length > 0 && this.files[0].name != this.company.logo)
+                this.updatePicture(this.company._id);
               this.changeState('RETRIEVE');
             } else {
               this.toaster.error('NO AGREGADO!');
@@ -202,12 +206,10 @@ export class AddcompanyComponent implements OnInit {
   }
 
   onSelect(event) {
-    //console.log(event);
     if (this.files.length > 0) {
       this.files = [];
     }
     this.files.push(...event.addedFiles);
-    //this.companyFormGroup.get('logo').setValue(this.files[0].name);
   }
 
   onRemove(event) {

@@ -243,7 +243,11 @@
     "assignments": "asignaciones",
     "assignmentdate": "fecha de asignación",
     "dcs": "CEDI's",
-    "distributioncenter": "CEDI"
+    "distributioncenter": "CEDI",
+    "idNumber": "Identificación",
+    "genre": "género",
+    "isDriver": "es conductor",
+    "isUser": "es usuario"
   },
   "AVAILABLE": "DISPONIBLE",
   "ON-DUTY": "EN SERVICIO",
@@ -268,7 +272,7 @@
     "yes": "sí"
   },
   "notifications": {
-    "nodata": "No hay datos disponibles!",
+    "nodata": "No hay datos coincidentes!",
     "can_deactivate": "Proceder en desactivar el registro",
     "can_delete": "Proceder en eliminar el registro"
   },

@@ -243,7 +243,11 @@
     "assignmentdate": "assignment date",
     "driver": "driver",
     "distributioncenter": "distribution center",
-    "dcs": "DC's"
+    "dcs": "DC's",
+    "idNumber": "Identification",
+    "genre": "genre",
+    "isUser": "is user",
+    "isDriver": "is driver"
   },
   "pagination": {
     "limit": "limit",
@@ -263,7 +267,7 @@
     "delete": "delete"
   },
   "notifications": {
-    "nodata": "No data available!",
+    "nodata": "No data matched!",
     "can_deactivate": "Proceed to deactivate this record",
     "can_delete": "Proceed to delete this record"
   },

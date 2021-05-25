@@ -48,8 +48,8 @@
     <ng-data-table-column [field]="'_id'" [title]="'ID'" [visible]="false"> </ng-data-table-column>
 
     <ng-data-table-column
-      [field]="'names'"
-      [title]="translate.instant('domain.names').toUpperCase()"
+      [field]="'idNumber'"
+      [title]="translate.instant('domain.idNumber').toUpperCase()"
       [filterable]="true"
       [showDropdownFilter]="false"
       [filterPlaceholder]="translate.instant('record_actions.search')"
@@ -57,13 +57,62 @@
     >
     </ng-data-table-column>
     <ng-data-table-column
-      [field]="'lastNames'"
-      [title]="translate.instant('domain.lastNames').toUpperCase()"
+      [field]="'fullName'"
+      [title]="translate.instant('domain.fullName').toUpperCase()"
       [filterable]="true"
       [showDropdownFilter]="false"
       [filterPlaceholder]="translate.instant('record_actions.search')"
       [sortable]="true"
     >
+    </ng-data-table-column>
+
+    <ng-data-table-column
+      [field]="'genre'"
+      [title]="translate.instant('domain.genre').toUpperCase()"
+      [width]="150"
+      [sortable]="true"
+      [filterable]="true"
+      [dropdownFilterMenuPosition]="'bottom-right'"
+      [showDropdownFilter]="true"
+      [dropDownFilterShowOptionSelectCheckbox]="true"
+      [filterPlaceholder]="translate.instant('record_actions.search')"
+    >
+    </ng-data-table-column>
+
+    <ng-data-table-column
+      [field]="'isUser'"
+      [title]="translate.instant('domain.isUser').toUpperCase()"
+      [width]="150"
+      [sortable]="true"
+      [filterable]="true"
+      [dropdownFilterMenuPosition]="'bottom-right'"
+      [showDropdownFilter]="true"
+      [dropDownFilterShowOptionSelectCheckbox]="true"
+    >
+      <ng-template #ngDataTableCell let-row="row">
+        <td align="center">
+          <mat-slide-toggle color="primary" [checked]="row.item.isUser" [disabled]="true">
+          </mat-slide-toggle>
+        </td>
+      </ng-template>
+    </ng-data-table-column>
+
+    <ng-data-table-column
+      [field]="'isDriver'"
+      [title]="translate.instant('domain.isDriver').toUpperCase()"
+      [width]="150"
+      [sortable]="true"
+      [filterable]="true"
+      [dropdownFilterMenuPosition]="'bottom-right'"
+      [showDropdownFilter]="true"
+      [dropDownFilterShowOptionSelectCheckbox]="true"
+    >
+      <ng-template #ngDataTableCell let-row="row">
+        <td align="center">
+          <mat-slide-toggle color="primary" [checked]="row.item.isDriver" [disabled]="true">
+          </mat-slide-toggle>
+        </td>
+      </ng-template>
     </ng-data-table-column>
 
     <ng-data-table-column [width]="100">
@@ -79,9 +128,10 @@
           </button>
           <button
             mat-icon-button
+            [disabled]="cantDelete(row.item)"
             color="warn"
             (click)="confirmDelete(row.item)"
-            matTooltip="{{ 'record_actions.deactivate' | translate }}"
+            matTooltip="{{ 'record_actions.delete' | translate }}"
           >
             <mat-icon>delete</mat-icon>
           </button>
@@ -90,7 +140,7 @@
     </ng-data-table-column>
 
     <ng-template #ngDataTableNoRecords>
-      <mat-icon>hourglass_empty</mat-icon>
+      <mat-icon>search_off</mat-icon>
       <h4>{{ 'notifications.nodata' | translate | uppercase }}</h4>
     </ng-template>
   </ng-data-table>

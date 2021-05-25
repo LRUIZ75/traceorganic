@@ -1,4 +1,5 @@
 import { Component, Output, EventEmitter, Input, ViewEncapsulation } from '@angular/core';
+import { SettingsService, User } from '@core';
 
 @Component({
   selector: 'app-sidebar',
@@ -8,11 +9,14 @@ import { Component, Output, EventEmitter, Input, ViewEncapsulation } from '@angu
 })
 export class SidebarComponent {
   @Input() showToggle = true;
-  @Input() showUser = true; //TODO: Disabled by LRUIZ
-  @Input() showHeader = true; //Controla el header con el branding
+  @Input() showUser = false; //controlado desde AppSettings
+  @Input() showHeader = true; //Controla el header con el branding, desde AppSettings
   @Input() toggleChecked = false;
 
   @Output() toggleCollapsed = new EventEmitter<void>();
 
-  constructor() {}
+  constructor(settings: SettingsService) {
+    this.showUser = settings.getOptions().showUserPanel;
+    this.showHeader = settings.getOptions().showHeader;
+  }
 }

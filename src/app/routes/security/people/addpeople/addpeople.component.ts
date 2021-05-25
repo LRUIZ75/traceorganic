@@ -55,10 +55,8 @@ export class AddpeopleComponent implements OnInit {
       this.birthday = this.initialData.birthdate;
     }
 
-    this.personFormGroup.get("picture").disable();
-    
+    this.personFormGroup.get('picture').disable();
   }
-
 
   /**
    * Resetea el valor de todos los campos
@@ -88,7 +86,7 @@ export class AddpeopleComponent implements OnInit {
       return;
     }
 
-    this.person = <Person> this.personFormGroup.value;
+    this.person = <Person>this.personFormGroup.value;
 
     switch (this.formMode) {
       case 'EDIT':
@@ -96,14 +94,15 @@ export class AddpeopleComponent implements OnInit {
           .updateData(this.initialData._id, this.person)
           .toPromise()
           .then(res => {
-            var response = <HttpResponse<any>> res;
+            var response = <HttpResponse<any>>res;
 
-            if(response.ok)
-              this.newPerson = <Person> response.body.data;
-            if (this.files.length > 0 && this.initialData.picture != this.files[0].name) //solicita nueva imagen en modo editar
-            this.updatePicture(this.newPerson._id);
-            this.toaster.success('MODIFICADO!');
-            this.changeState('RETRIEVE');
+            if (response.ok) this.newPerson = <Person>response.body.data;
+            if (this.files.length > 0 && this.initialData.picture != this.files[0].name) {
+              //solicita nueva imagen en modo editar
+              this.updatePicture(this.newPerson._id);
+              this.toaster.success('MODIFICADO!');
+              this.changeState('RETRIEVE');
+            }
           })
           .catch(err => {
             this.toaster.error(err);
@@ -115,14 +114,15 @@ export class AddpeopleComponent implements OnInit {
           .addData(this.person)
           .toPromise()
           .then(res => {
-            var response = <HttpResponse<any>> res;
-            if(response.ok)
-              this.newPerson = <Person> response.body.data;
-              
-            if(this.files.length > 0) //agregó una foto
-            this.updatePicture(this.newPerson._id);
-            this.toaster.success('AGREGADO');
-            this.changeState('RETRIEVE');
+            var response = <HttpResponse<any>>res;
+            if (response.ok) this.newPerson = <Person>response.body.data;
+
+            if (this.files.length > 0) {
+              //agregó una foto
+              this.updatePicture(this.newPerson._id);
+              this.toaster.success('AGREGADO');
+              this.changeState('RETRIEVE');
+            }
           })
           .catch(err => {
             this.toaster.error(err);
@@ -133,8 +133,6 @@ export class AddpeopleComponent implements OnInit {
       default:
         this.toaster.warning('Se desconoce el modo del formulario');
     }
-
-
   }
 
   updatePicture(id: string) {
@@ -143,11 +141,9 @@ export class AddpeopleComponent implements OnInit {
     this.peopleService
       .updatePicture(id, this.files[0])
       .toPromise()
-      .then(resp => {
-        if (!resp) {
-          this.toaster.error('Operación fallida!');
-          return;
-        }
+      .then(res => {
+        var response = <HttpResponse<any>>res;
+        if (!response.ok) this.toaster.success('NO MODIFICADO!');
       })
       .catch(err => {
         this.toaster.error(err);
@@ -164,7 +160,7 @@ export class AddpeopleComponent implements OnInit {
   }
 
   onRemove(event) {
-    this.files =[];
+    this.files = [];
     this.personFormGroup.get('picture').setValue('');
   }
 }

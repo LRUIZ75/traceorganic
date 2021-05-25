@@ -111,29 +111,19 @@
             />
 
           </mat-form-field>
-          <div class="matero-row" fxAlign="center">
-            <div class="matero-col" fxFlex="30" fxFlex.lt-sm="50" fxFlex.lt-md="40">
-              <mat-checkbox formControlName="isUser"
-                > {{'domain.isuser' | translate | titlecase }} 
-              </mat-checkbox>
-     
-              <mat-checkbox formControlName="isEmployee"
-                > {{'domain.isemployee' | translate | titlecase }} 
-              </mat-checkbox>
-  
-              <mat-checkbox formControlName="isClient"
-                > {{'domain.isclient' | translate | titlecase }} 
-              </mat-checkbox>
-            </div>
 
-            <div class="matero-col" fxFlex="30" fxFlex.lt-sm="50" fxFlex.lt-md="40">
-              <!-- in app.component.html -->
-              <ngx-dropzone (change)="onSelect($event)">
-                <ngx-dropzone-label>Nueva Fotografía: clic o arrastre</ngx-dropzone-label>
+          <div class="matero-row" fxAlign="center">
+            <div class="matero-col" fxFlex="60">
+              <ngx-dropzone class="custom-dropzone"
+              [accept]="'image/*'"
+              [expandable]="false"
+              [multiple]="false"
+              [maxFileSize]="51200"
+
+              (change)="onSelect($event)">
+                <ngx-dropzone-label>{{ 'domain.logo' | translate| titlecase}}</ngx-dropzone-label>
                 <ngx-dropzone-image-preview
                   *ngFor="let f of files"
-                  [multiple]="false"
-                  accept="image/*"
                   [removable]="true"
                   (removed)="onRemove(f)"
                   [file]="f"
@@ -143,8 +133,6 @@
               </ngx-dropzone>
             </div>
           </div>
-
-
         </form>
       </mat-card-content>
       <mat-card-actions align="right">

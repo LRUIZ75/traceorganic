@@ -82,7 +82,10 @@ export class SecurityPeopleComponent implements OnInit {
       .then(res => {
         var response = <HttpResponse<any>>res;
         if (response.ok || response.body.status == "ok") 
-          this.peopleList = response.body.data;// as Person[]
+         { this.peopleList = response.body.data;// as Person[]
+          this.peopleList.forEach(p =>{
+            p.fullName = p.names + " " + p.lastNames;
+          });}
         else this.peopleList =[];
       })
       .catch(err =>{
@@ -108,6 +111,10 @@ export class SecurityPeopleComponent implements OnInit {
     this.selected = selected;
     this.opened = true;
     this.currentState = 'EDIT';
+  }
+
+  cantDelete(selected) {
+    return (selected.isUser || selected.isDriver);
   }
 
   confirmDelete(selected) {

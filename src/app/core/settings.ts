@@ -16,7 +16,7 @@ export const defaults: AppSettings = {
   dir: 'ltr',
   showHeader: true,
   headerPos: 'fixed',
-  showUserPanel: true, //TODO: Disabled by LRUIZ
+  showUserPanel: false, //TODO: Disabled by LRUIZ
   sidenavOpened: true,
   sidenavCollapsed: false,
   language: 'es-ES',

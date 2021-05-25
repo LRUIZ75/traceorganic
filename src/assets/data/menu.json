@@ -82,17 +82,8 @@
           "route": "drivers",
           "name": "drivers",
           "type": "link"
-        },
-        {
-          "route": "serviceschedules",
-          "name": "serviceschedules",
-          "type": "link"
-        },
-        {
-          "route": "assignments",
-          "name": "assignments",
-          "type": "link"
         }
+        
       ]
     },
     {
