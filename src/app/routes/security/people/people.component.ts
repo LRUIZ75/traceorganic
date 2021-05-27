@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, DoCheck, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { CdkDragStart } from '@angular/cdk/drag-drop';
 import { TranslateService } from '@ngx-translate/core';
 import { ToastrService } from 'ngx-toastr';
@@ -16,19 +16,22 @@ import { PeopleService, Person } from 'app/services';
   styleUrls: ['./people.component.scss'],
   providers: [PeopleService],
 })
-export class SecurityPeopleComponent implements OnInit {
+export class SecurityPeopleComponent implements OnInit, DoCheck {
   /* Variables locales */
 
+  public willUpdate: boolean = false;
+  public lastState: string = 'RETRIEVE';
   public currentState: string = 'RETRIEVE';
-  public selected: Person;
+  public selected: any;
 
   public peopleList: any[];
-  
+
   public title: string;
   dragging = false;
   opened = false;
 
   public dataTableTranslations: DataTableTranslations;
+  changeDetected: boolean;
 
   constructor(
     public peopleService: PeopleService,
@@ -37,7 +40,21 @@ export class SecurityPeopleComponent implements OnInit {
     private confirmDialog: MatDialog
   ) {
     this.title = this.translate.instant('domain.people');
-    this.getList();
+  }
+
+  ngDoCheck(): void {
+    if (this.lastState !== this.currentState) {
+      this.changeDetected = true;
+      console.log(`${this.lastState} -> ${this.currentState}`)
+      this.lastState = this.currentState;
+    }
+
+    if (this.changeDetected) {
+      console.log("UPDATING LIST");
+      this.getList();
+    }
+
+    this.changeDetected = false;
   }
 
   getTitle() {
@@ -47,11 +64,13 @@ export class SecurityPeopleComponent implements OnInit {
   }
 
   ngOnInit() {
-/*     if ('geolocation' in navigator) {
+    /*     if ('geolocation' in navigator) {
       console.log('geolocation is available');
     } else {
       console.log('geolocation is NOT available');
     } */
+
+    this.getList();
   }
 
   getDataTableTranslations(): DataTableTranslations {
@@ -81,17 +100,19 @@ export class SecurityPeopleComponent implements OnInit {
       .toPromise()
       .then(res => {
         var response = <HttpResponse<any>>res;
-        if (response.ok || response.body.status == "ok") 
-         { this.peopleList = response.body.data;// as Person[]
-          this.peopleList.forEach(p =>{
-            p.fullName = p.names + " " + p.lastNames;
-          });}
-        else this.peopleList =[];
+        if (response.ok || response.body.status == 'ok') {
+          this.peopleList = response.body.data; // as Person[]
+          this.peopleList.forEach(p => {
+            p.fullName = p.names + ' ' + p.lastNames;
+          });
+        } else this.peopleList = [];
       })
-      .catch(err =>{
+      .catch(err => {
         this.toaster.error(err);
       });
   }
+
+
 
   handleDragStart(event: CdkDragStart): void {
     this.dragging = true;
@@ -103,18 +124,16 @@ export class SecurityPeopleComponent implements OnInit {
       return;
     }
     this.selected = undefined;
-    this.opened = true;
     this.currentState = 'ADD';
   }
 
   edit(selected) {
-    this.selected = selected;
-    this.opened = true;
+    this.selected = selected._id;
     this.currentState = 'EDIT';
   }
 
   cantDelete(selected) {
-    return (selected.isUser || selected.isDriver);
+    return selected.isUser || selected.isDriver;
   }
 
   confirmDelete(selected) {
@@ -142,29 +161,32 @@ export class SecurityPeopleComponent implements OnInit {
   }
 
   delete(selected) {
-    this.selected = selected;
+    this.selected = selected._id;
 
     this.peopleService
-      .deleteData(selected._id)
+      .deleteData(this.selected)
       .toPromise()
       .then(deleted => {
         if (deleted) {
-          this.toaster.success('DESACTIVADO!');
+          this.toaster.success('ELIMINADO!');
           this.getList();
         } else {
-          this.toaster.error('NO DESACTIVADO!');
+          this.toaster.error('NO ELIMINADO!');
           return;
         }
       })
       .catch(err => {
-        this.toaster.error('NO DESACTIVADO!');
+        this.toaster.error('NO ELIMINADO!');
         return;
       });
   }
 
   changeState(state: string) {
     this.currentState = state;
-    if (state == 'RETRIEVE') this.getList();
+    if (state == 'RETRIEVE' && this.opened) {
+      this.opened = false;
+      this.getList();
+    }
   }
 
   changeSelect(e: any) {

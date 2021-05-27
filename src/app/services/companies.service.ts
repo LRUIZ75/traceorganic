@@ -98,7 +98,7 @@ export class CompaniesService {
       responseType: 'blob',
       withCredentials: false,
     };
-    const req = new HttpRequest('GET', `${this.endpoint}picture/${filename}`,initOptions);
+    const req = new HttpRequest('GET', `${this.endpoint}images/${filename}`,initOptions);
     return this.http.request(req).pipe();
   }
 

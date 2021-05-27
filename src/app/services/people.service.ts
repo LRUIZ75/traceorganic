@@ -3,14 +3,14 @@ import { Observable } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { environment } from '@env/environment';
 
-export enum IdType {
+export enum IDTYPES {
   ID_CARD = 'ID-CARD',
   PASSPORT = 'PASSPORT',
   RESIDENCE = 'RESIDENCE',
   DRIVER = 'DRIVER',
 }
 
-export enum Genre {
+export enum GENRES {
   MASC = 'M',
   FEME = 'F',
   NDEF = 'U',
@@ -20,9 +20,9 @@ export interface Person {
     _id: string,
     names: string,
     lastNames: string,
-    idType: IdType | string,
+    idType: IDTYPES | string,
     idNumber: string,
-    genre: Genre | string,
+    genre: GENRES | string,
     mobile: string,
     birthDate: Date,    
     picture: string,
@@ -111,7 +111,7 @@ export class PeopleService {
       responseType: 'blob',
       withCredentials: false,
     };
-    const req = new HttpRequest('GET', `${this.endpoint}picture/${filename}`,initOptions);
+    const req = new HttpRequest('GET', `${this.endpoint}images/${filename}`,initOptions);
     return this.http.request(req).pipe();
   }
 

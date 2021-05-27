@@ -2,7 +2,7 @@
 <div *ngIf="currentState == 'ADD' || currentState == 'EDIT'">
   <app-addpeople
     [formMode]="currentState"
-    [initialData]="selected"
+    [selectedId]="selected"
     (changeStateEvent)="changeState($event)"
   >
   </app-addpeople>
@@ -91,7 +91,7 @@
     >
       <ng-template #ngDataTableCell let-row="row">
         <td align="center">
-          <mat-slide-toggle color="primary" [checked]="row.item.isUser" [disabled]="true">
+          <mat-slide-toggle [checked]="row.item.isUser" [disabled]="true">
           </mat-slide-toggle>
         </td>
       </ng-template>
@@ -109,7 +109,7 @@
     >
       <ng-template #ngDataTableCell let-row="row">
         <td align="center">
-          <mat-slide-toggle color="primary" [checked]="row.item.isDriver" [disabled]="true">
+          <mat-slide-toggle [checked]="row.item.isDriver" [disabled]="true">
           </mat-slide-toggle>
         </td>
       </ng-template>

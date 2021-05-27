@@ -65,9 +65,9 @@ export class DriversService {
       .pipe(map(this.extractData), catchError(this.handleError));
   }
 
-  getPicture(id: string): Observable<any> {
+  getPicture(filename: string): Observable<any> {
     return this.http
-      .get(this.endpoint + 'picture/' + id)
+      .get(this.endpoint + 'images/' + filename)
       .pipe(map(this.extractData), catchError(this.handleError));
   }
 

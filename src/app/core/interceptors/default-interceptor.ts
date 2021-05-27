@@ -44,29 +44,23 @@ export class DefaultInterceptor implements HttpInterceptor {
         'Accept': 'application/json',
         'Accept-Language': this.settings.language,
       };
-
-      //newReq = req.clone({ url, setHeaders: headers});
-      //console.log('Headers: ' + JSON.stringify(headers));
-
-    } else if (url.includes('/picture/')) {
+    } else if (url.includes('/images/') && req.method.includes('GET')) {
+      //Este es el único método de API que no utiliza auth, debido a su uso posible en directo desde plantilla HTML
+      //TODO: Revisar si no estoy dejando un agujero de seguridad acá!!!
       headers = {
         'Accept': 'image/*',
         'Accept-Language': this.settings.language,
       };
-
-      //return next.handle(req);
-      
     } else {
       headers = {
         'Accept': 'application/json',
         'Accept-Language': this.settings.language,
         'Authorization': `Bearer ${this.token.get().token}`,
       };
-
     }
-    
+
     const newReq = req.clone({ setHeaders: headers, withCredentials: true, url: url });
-    
+
     //return next.handle(newReq);
 
     return next.handle(newReq).pipe(
@@ -85,10 +79,8 @@ export class DefaultInterceptor implements HttpInterceptor {
 
       // failure: { status: 'error'|'**' message: 'failure' }
       // success: { status: 'ok',  message?: ' message', data: {}, token?: 'JWT Token'}
-      if(event.ok)
-        return of(event);
-      if(event.statusText == "OK")
-        return of(event);
+      if (event.ok) return of(event);
+      if (event.statusText == 'OK') return of(event);
       if (body && body.status !== 'ok') {
         if (body.message && body.message !== '') {
           this.toastr.error(body.msg);
@@ -106,7 +98,7 @@ export class DefaultInterceptor implements HttpInterceptor {
     switch (error.status) {
       case 304:
       case 200:
-        break; 
+        return;
       case 401:
         this.goto(`/auth/login`);
         break;
@@ -114,7 +106,12 @@ export class DefaultInterceptor implements HttpInterceptor {
       case 404:
       case 500:
         if (error.url.includes('/api/'))
-          this.toastr.error(error.error.message || `${error.status} ${error.statusText}`);
+          {
+            if(error.error.message && error.error.message.includes('undefinedE11000'))
+            error.error.message = error.error.message.replace('undefinedE11000 duplicate key',"LLAVE DUPLICADA ");
+            this.toastr.error(error.error.message || `${error.status} ${error.statusText}`);
+            return; //Los mensajes de error de la api se exponen únicamente desde el interceptor
+          }
         else this.goto(`/sessions/${error.status}`);
 
         break;
