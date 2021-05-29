@@ -18,7 +18,7 @@
       *ngIf="currentState == 'RETRIEVE'"
     >
       <button mat-raised-button color="primary" (click)="openPanel($event)">
-        {{ 'record_actions.add_new' | translate }}
+        {{ 'record_actions.add_new' | translate | titlecase}}
       </button>
     </div>
   </mat-toolbar>

@@ -20,14 +20,14 @@
 
   // Colorful
   .matero-header-white & {
-    background-color: map-get($mat-linceley-yellow,500); //REM: Cambiado en base al tema Linceley
+    background-color: map-get($mat-cornyellow,500); //TODO: Cambiado en base al tema personalizado
   }
 }
 
 .matero-sidebar-main {
   height: calc(100% - #{$toolbar-height-desktop});
   overflow: auto;
-  background-color: map-get($mat-linceley-yellow, 50 ); //REM: Cambiado en base al tema Linceley
+  background-color: map-get($mat-cornyellow, 50 ); //TODO: Cambiado en base al tema personalizado
 
   @include bp-lt(small) {
     & {

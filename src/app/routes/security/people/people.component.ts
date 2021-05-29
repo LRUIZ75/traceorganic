@@ -8,7 +8,7 @@ import { ConfirmDialogComponent } from '@shared/components/confirm-dialog/confir
 //Import services
 import { DataTableTranslations } from 'ornamentum';
 import { HttpResponse } from '@angular/common/http';
-import { PeopleService, Person } from 'app/services';
+import { PeopleService, Person, GENRES, IDTYPES } from 'app/services';
 
 @Component({
   selector: 'app-security-people',
@@ -28,7 +28,14 @@ export class SecurityPeopleComponent implements OnInit, DoCheck {
 
   public title: string;
   dragging = false;
-  opened = false;
+
+  genreList = Object.keys(GENRES).map(function (key) {
+    return { id: GENRES[key], name: key };
+  });
+
+  idTypesList = Object.keys(IDTYPES).map(function (key) {
+    return { id: IDTYPES[key], name: key };
+  });
 
   public dataTableTranslations: DataTableTranslations;
   changeDetected: boolean;
@@ -45,12 +52,12 @@ export class SecurityPeopleComponent implements OnInit, DoCheck {
   ngDoCheck(): void {
     if (this.lastState !== this.currentState) {
       this.changeDetected = true;
-      console.log(`${this.lastState} -> ${this.currentState}`)
+      console.log(`INFO: ${this.lastState} -> ${this.currentState}`);
       this.lastState = this.currentState;
     }
 
     if (this.changeDetected) {
-      console.log("UPDATING LIST");
+      console.log('INFO: UPDATING LIST');
       this.getList();
     }
 
@@ -104,6 +111,12 @@ export class SecurityPeopleComponent implements OnInit, DoCheck {
           this.peopleList = response.body.data; // as Person[]
           this.peopleList.forEach(p => {
             p.fullName = p.names + ' ' + p.lastNames;
+            p.genreName = this.translate
+              .instant(this.genreList.find(g => g.id == p.genre).name)
+              .toUpperCase();
+            p.idTypeName = this.translate
+              .instant(this.idTypesList.find(t => t.id == p.idType).name)
+              .toUpperCase();
           });
         } else this.peopleList = [];
       })
@@ -111,8 +124,6 @@ export class SecurityPeopleComponent implements OnInit, DoCheck {
         this.toaster.error(err);
       });
   }
-
-
 
   handleDragStart(event: CdkDragStart): void {
     this.dragging = true;
@@ -183,10 +194,6 @@ export class SecurityPeopleComponent implements OnInit, DoCheck {
 
   changeState(state: string) {
     this.currentState = state;
-    if (state == 'RETRIEVE' && this.opened) {
-      this.opened = false;
-      this.getList();
-    }
   }
 
   changeSelect(e: any) {

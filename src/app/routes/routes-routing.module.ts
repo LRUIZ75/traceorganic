@@ -31,8 +31,11 @@ const routes: Routes = [
         path: 'security',
         loadChildren: () => import('./security/security.module').then(m => m.SecurityModule),
       },
-  { path: 'org', loadChildren: () => import('./org/org.module').then(m => m.OrgModule) },
-  { path: 'fleet', loadChildren: () => import('./fleet/fleet.module').then(m => m.FleetModule) },
+      { path: 'org', loadChildren: () => import('./org/org.module').then(m => m.OrgModule) },
+      {
+        path: 'fleet',
+        loadChildren: () => import('./fleet/fleet.module').then(m => m.FleetModule),
+      },
     ],
   },
   {

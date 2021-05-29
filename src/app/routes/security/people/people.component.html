@@ -13,11 +13,11 @@
     <div
       matTooltip="{{ 'record_actions.add_new' | translate }} {{ 'domain.people' | translate }}"
       cdkDrag
-      (cdkDragStarted)="handleDragStart($event)"
+      (cdkDragStarted)="handleDragStart(event)"
       *ngIf="currentState == 'RETRIEVE'"
     >
-      <button mat-raised-button color="primary" (click)="openPanel($event)">
-        {{ 'record_actions.add_new' | translate }}
+      <button mat-raised-button color="primary" (click)="openPanel(event)">
+        {{ 'record_actions.add_new' | translate | titlecase }}
       </button>
     </div>
   </mat-toolbar>
@@ -57,6 +57,17 @@
     >
     </ng-data-table-column>
     <ng-data-table-column
+      [field]="'idTypeName'"
+      [title]="translate.instant('domain.idType').toUpperCase()"
+      [sortable]="true"
+      [filterable]="true"
+      [dropdownFilterMenuPosition]="'bottom-right'"
+      [showDropdownFilter]="true"
+      [dropDownFilterShowOptionSelectCheckbox]="true"
+      [filterPlaceholder]="translate.instant('record_actions.search')"
+    >
+    </ng-data-table-column>
+    <ng-data-table-column
       [field]="'fullName'"
       [title]="translate.instant('domain.fullName').toUpperCase()"
       [filterable]="true"
@@ -67,7 +78,7 @@
     </ng-data-table-column>
 
     <ng-data-table-column
-      [field]="'genre'"
+      [field]="'genreName'"
       [title]="translate.instant('domain.genre').toUpperCase()"
       [width]="150"
       [sortable]="true"
@@ -91,8 +102,7 @@
     >
       <ng-template #ngDataTableCell let-row="row">
         <td align="center">
-          <mat-slide-toggle [checked]="row.item.isUser" [disabled]="true">
-          </mat-slide-toggle>
+          <mat-slide-toggle [checked]="row.item.isUser" [disabled]="true"> </mat-slide-toggle>
         </td>
       </ng-template>
     </ng-data-table-column>
@@ -109,8 +119,7 @@
     >
       <ng-template #ngDataTableCell let-row="row">
         <td align="center">
-          <mat-slide-toggle [checked]="row.item.isDriver" [disabled]="true">
-          </mat-slide-toggle>
+          <mat-slide-toggle [checked]="row.item.isDriver" [disabled]="true"> </mat-slide-toggle>
         </td>
       </ng-template>
     </ng-data-table-column>

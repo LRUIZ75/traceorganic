@@ -11,9 +11,12 @@
 //
 // Light style
 //
+//TODO: Main settings for light theme
+
 $primary: mat-palette($mat-greenleaf); //REM: Cambiado en base al tema personalizado
-$accent: mat-palette($mat-linceley-yellow, 500, A100, 900); //REM: Cambiado en base al tema personalizado
-$theme: mat-light-theme($primary, $accent); //REM: Cambiado en base al tema personalizado
+$accent: mat-palette($mat-cornyellow, 500, A100, 900); //REM: Cambiado en base al tema personalizado
+$warn: mat-palette($mat-deep-orange);
+$theme: mat-light-theme($primary, $accent, $warn); //$accent); //REM: Cambiado en base al tema personalizado
 
 $config: mat-typography-config();
 

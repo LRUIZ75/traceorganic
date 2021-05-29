@@ -47,8 +47,8 @@
               formControlName="idType"
               required
             >
-              <mat-option *ngFor="let item of idtypes" [value]="item.id">
-                {{ item.name }}
+              <mat-option *ngFor="let item of idTypesList" [value]="item.id">
+                {{ item.name | translate | titlecase }}
               </mat-option>
             </mat-select>
 
@@ -78,12 +78,14 @@
               formControlName="genre"
               required
             >
-              <mat-option *ngFor="let item of genres" [value]="item.id">
-                {{ item.name }}
+              <mat-option *ngFor="let g of genreList" [value]="g.id">
+                {{ g.name | translate | titlecase }}
+               
               </mat-option>
             </mat-select>
 
             <mat-error *ngIf="personFormGroup.get('genre').hasError('required')">
+              
               {{ 'validations.required' | translate }}
             </mat-error>
           </mat-form-field>
@@ -120,13 +122,13 @@
           <div>
             <mat-form-field floatLabel="always" appearance="none">
               <mat-label>{{ 'domain.isUser' | translate | titlecase }}</mat-label>
-              <mat-slide-toggle formControlName="isUser" disabled></mat-slide-toggle>
+              <mat-slide-toggle formControlName="isUser" ></mat-slide-toggle>
               <textarea matInput hidden></textarea>
             </mat-form-field>
 
             <mat-form-field floatLabel="always" appearance="none">
               <mat-label>{{ 'domain.isDriver' | translate | titlecase }}</mat-label>
-              <mat-slide-toggle formControlName="isDriver" disabled></mat-slide-toggle>
+              <mat-slide-toggle formControlName="isDriver" ></mat-slide-toggle>
               <textarea matInput hidden></textarea>
             </mat-form-field>
           </div>

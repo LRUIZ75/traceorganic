@@ -22,18 +22,14 @@ export class AddpeopleComponent implements OnInit {
   files: File[] = [];
   picture: any;
 
-  public genres = [
-    { id: GENRES.MASC, name: 'Masculino' },
-    { id: GENRES.FEME, name: 'Femenino' },
-    { id: GENRES.NDEF, name: 'No binario' },
-  ];
+  genreList = Object.keys(GENRES).map(function (key) {
+    return {id: GENRES[key], name: key};
+  });
 
-  public idtypes = [
-    { id: IDTYPES.ID_CARD, name: 'Identificación Nacional' },
-    { id: IDTYPES.DRIVER, name: 'Conductor' },
-    { id: IDTYPES.PASSPORT, name: 'Pasaporte' },
-    { id: IDTYPES.RESIDENCE, name: 'Identificación Residente' },
-  ];
+  idTypesList = Object.keys(IDTYPES).map(function (key) {
+    return {id: IDTYPES[key], name: key};
+  });
+
 
   public birthday: Date;
   //Edad máxima -> 80 años, especialmente si conductor
@@ -64,8 +60,8 @@ export class AddpeopleComponent implements OnInit {
       mobile: [''],
       birthDate: [''],
       picture: [''],
-      isUser: [false],
-      isDriver: [false],
+      isUser: {value: false, disabled: true},
+      isDriver: {value: false, disabled: true},
     });
 
     if (this.formMode == 'EDIT' && this.selectedId) {

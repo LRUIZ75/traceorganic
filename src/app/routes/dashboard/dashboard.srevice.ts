@@ -66,7 +66,7 @@ export class DashboardService {
       progress: {
         value: 50,
       },
-      color: 'bg-linceley-blue-500',
+      color: 'bg-blueprint-500',
     },
     {
       title: 'Material Red 500',
@@ -82,7 +82,7 @@ export class DashboardService {
       progress: {
         value: 80,
       },
-      color: 'bg-linceley-yellow-500',
+      color: 'bg-mustardyellow-500',
     },
     {
       title: 'Material Green 500',
