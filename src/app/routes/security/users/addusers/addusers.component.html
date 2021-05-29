@@ -1,0 +1,258 @@
+<div fxLayout="row wrap" fxLayoutAlign="center center">
+  <div fxFlex="630px" fxFlex.sm="420px" fxFlex.lt-sm="315px" fxFlexAlign="center">
+    <mat-card>
+      <mat-card-title class="mat-title">
+        <!-- *ngIf="formMode == 'ADD'"> -->
+        {{ 'record_actions.add_new' | translate | titlecase }}:
+        {{ 'domain.user' | translate | titlecase }}
+      </mat-card-title>
+<!--       <mat-card-title class="mat-title"
+        *ngIf="formMode == 'EDIT'">
+        {{ 'record_actions.edit' | translate | titlecase }}:
+        {{ 'domain.user' | translate | titlecase }}
+      </mat-card-title> -->
+      <mat-card-content>
+        <mat-tab-group class="m--16">
+          <mat-tab label="Registro de Usuario">
+            <div class="m-16">
+              <img class="d-block w-full" src="assets/images/pixabay/2.jpg" alt="" />
+              <h3>mat-card 200</h3>
+              <p>
+                Nullam at risus metus. Quisque nisl purus, pulvinar ut mauris vel, elementum
+                suscipit eros. Praesent ornare ante massa, egestas pellentesque orci convallis ut.
+                Curabitur consequat convallis est, id luctus mauris lacinia vel. Nullam tristique
+                lobortis mauris, ultricies fermentum lacus bibendum id. Proin non ante tortor.
+                Suspendisse pulvinar ornare tellus nec pulvinar. Nam pellentesque accumsan mi, non
+                pellentesque sem convallis sed. Quisque rutrum erat id auctor gravida.
+              </p>
+            </div>
+          </mat-tab>
+          <mat-tab label="Datos de Persona">
+            <div class="m-16">
+              <img class="d-block w-full" src="assets/images/pixabay/8.jpg" alt="" />
+              <h3>Vestibulum vitae diam nec odio dapibus placerat. Ut ut lorem justo.</h3>
+              <p>
+                Fusce bibendum augue nec fermentum tempus. Sed laoreet dictum tempus. Aenean ac sem
+                quis nulla malesuada volutpat. Nunc vitae urna pulvinar velit commodo cursus. Nullam
+                eu felis quis diam adipiscing hendrerit vel ac turpis. Nam mattis fringilla euismod.
+                Donec eu ipsum sit amet mauris iaculis aliquet. Quisque sit amet feugiat odio. Cras
+                convallis lorem at libero lobortis, placerat lobortis sapien lacinia. Duis sit amet
+                elit bibendum sapien dignissim bibendum.
+              </p>
+            </div>
+          </mat-tab>
+          <mat-tab label="Permisos">
+            <div class="m-16">
+              <img class="d-block w-full" src="assets/images/pixabay/16.jpg" alt="" />
+              <h3>
+                Maecenas eget turpis luctus, scelerisque arcu id, iaculis urna. Interdum et
+                malesuada fames ac ante ipsum primis in faucibus.
+              </h3>
+              <p>
+                Morbi placerat est nec pharetra placerat. Ut laoreet nunc accumsan orci aliquam
+                accumsan. Maecenas volutpat dolor vitae sapien ultricies fringilla. Suspendisse
+                vitae orci sed nibh ultrices tristique. Aenean in ante eget urna semper imperdiet.
+                Pellentesque sagittis a nulla at scelerisque. Nam augue nulla, accumsan quis nisi a,
+                facilisis eleifend nulla. Praesent aliquet odio non imperdiet fringilla.
+              </p>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </mat-card-content>
+      <mat-card-actions align="right">
+        <button
+          *ngIf="formMode == 'ADD'"
+          mat-raised-button
+          color="default"
+          type="reset"
+          (click)="onReset()"
+        >
+          {{ 'record_actions.reset' | translate | titlecase }}
+        </button>
+        <button mat-raised-button color="default" type="cancel" (click)="onCancel()">
+          {{ 'record_actions.cancel' | translate | titlecase }}
+        </button>
+        <button mat-raised-button color="primary" type="submit" (click)="onSubmit()">
+          {{ 'record_actions.save' | translate | titlecase }}
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <!--       <mat-card>
+        <mat-card-title class="mat-title" *ngIf="formMode == 'ADD'">
+          {{ 'record_actions.add_new' | translate | titlecase }}:
+          {{ 'domain.people' | translate | titlecase }}
+        </mat-card-title>
+        <mat-card-title class="mat-title" *ngIf="formMode == 'EDIT'">
+          {{ 'record_actions.edit' | translate | titlecase }}:
+          {{ 'domain.people' | translate | titlecase }}
+        </mat-card-title>
+        <mat-card-content>
+          <form [formGroup]="personFormGroup">
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="{{ 'domain.names' | translate | titlecase }}"
+                formControlName="names"
+                required
+              />
+              <mat-error *ngIf="personFormGroup.get('names').hasError('required')">
+                {{ 'validations.required' | translate }}
+              </mat-error>
+              <mat-error *ngIf="personFormGroup.get('names').hasError('minlength')">
+                {{ 'validations.minlength' | translate }}
+              </mat-error>
+            </mat-form-field>
+  
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="{{ 'domain.lastnames' | translate | titlecase }}"
+                formControlName="lastNames"
+                required
+              />
+              <mat-error *ngIf="personFormGroup.get('lastNames').hasError('required')">
+                {{ 'validations.required' | translate }}
+              </mat-error>
+              <mat-error *ngIf="personFormGroup.get('lastNames').hasError('minlength')">
+                {{ 'validations.minlength' | translate }}
+              </mat-error>
+            </mat-form-field>
+  
+            <mat-form-field>
+              <mat-select
+                placeholder="{{ 'domain.idType' | translate | titlecase }}"
+                formControlName="idType"
+                required
+              >
+                <mat-option *ngFor="let item of idTypesList" [value]="item.id">
+                  {{ item.name | translate | titlecase }}
+                </mat-option>
+              </mat-select>
+  
+              <mat-error *ngIf="personFormGroup.get('idType').hasError('required')">
+                {{ 'validations.required' | translate }}
+              </mat-error>
+            </mat-form-field>
+  
+            <mat-form-field id="id-Number">
+              <input
+                matInput
+                placeholder="{{ 'domain.idNumber' | translate | titlecase }}"
+                formControlName="idNumber"
+                required
+              />
+              <mat-error *ngIf="personFormGroup.get('idNumber').hasError('required')">
+                {{ 'validations.required' | translate }}
+              </mat-error>
+              <mat-error *ngIf="personFormGroup.get('idNumber').hasError('minlength')">
+                {{ 'validations.minlength' | translate }}
+              </mat-error>
+            </mat-form-field>
+  
+            <mat-form-field>
+              <mat-select
+                placeholder="{{ 'domain.genre' | translate | titlecase }}"
+                formControlName="genre"
+                required
+              >
+                <mat-option *ngFor="let g of genreList" [value]="g.id">
+                  {{ g.name | translate | titlecase }}
+                 
+                </mat-option>
+              </mat-select>
+  
+              <mat-error *ngIf="personFormGroup.get('genre').hasError('required')">
+                
+                {{ 'validations.required' | translate }}
+              </mat-error>
+            </mat-form-field>
+  
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="{{ 'domain.birthDate' | translate | titlecase }}"
+                formControlName="birthDate"
+                [matDatepicker]="birthdayPicker"
+                [min]="minBirthday"
+                [max]="maxBirthday"
+              />
+              <mat-datepicker-toggle matSuffix [for]="birthdayPicker"></mat-datepicker-toggle>
+              <mat-datepicker #birthdayPicker startView="day"></mat-datepicker>
+            </mat-form-field>
+  
+            <mat-form-field>
+              <input
+                matInput
+                placeholder="{{ 'domain.mobile' | translate | titlecase }}"
+                formControlName="mobile"
+                required
+              />
+              <mat-icon matSuffix>phone_android</mat-icon>
+              <mat-error *ngIf="personFormGroup.get('mobile').hasError('required')">
+                {{ 'validations.mobile' | translate }}
+              </mat-error>
+              <mat-error *ngIf="personFormGroup.get('mobile').hasError('minlength')">
+                {{ 'validations.mobile' | translate }}
+              </mat-error>
+            </mat-form-field>
+  
+            <div>
+              <mat-form-field floatLabel="always" appearance="none">
+                <mat-label>{{ 'domain.isUser' | translate | titlecase }}</mat-label>
+                <mat-slide-toggle formControlName="isUser" ></mat-slide-toggle>
+                <textarea matInput hidden></textarea>
+              </mat-form-field>
+  
+              <mat-form-field floatLabel="always" appearance="none">
+                <mat-label>{{ 'domain.isDriver' | translate | titlecase }}</mat-label>
+                <mat-slide-toggle formControlName="isDriver" ></mat-slide-toggle>
+                <textarea matInput hidden></textarea>
+              </mat-form-field>
+            </div>
+  
+            <div>
+              <ngx-dropzone
+                class="custom-dropzone"
+                [accept]="'image/*'"
+                [expandable]="false"
+                [multiple]="false"
+                [maxFileSize]="51200"
+                (change)="onSelect($event)"
+              >
+                <ngx-dropzone-label>{{
+                  'domain.picture' | translate | titlecase
+                }}</ngx-dropzone-label>
+  
+                <ngx-dropzone-image-preview
+                  *ngFor="let f of files"
+                  [removable]="true"
+                  (removed)="onRemove(f)"
+                  [file]="f"
+                >
+                  <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+                </ngx-dropzone-image-preview>
+              </ngx-dropzone>
+            </div>
+          </form>
+        </mat-card-content>
+        <mat-card-actions align="right">
+          <button
+            *ngIf="formMode == 'ADD'"
+            mat-raised-button
+            color="default"
+            type="reset"
+            (click)="onReset()"
+          >
+            {{ 'record_actions.reset' | translate | titlecase }}
+          </button>
+          <button mat-raised-button color="default" type="cancel" (click)="onCancel()">
+            {{ 'record_actions.cancel' | translate | titlecase }}
+          </button>
+          <button mat-raised-button color="primary" type="submit" (click)="onSubmit()">
+            {{ 'record_actions.save' | translate | titlecase }}
+          </button>
+        </mat-card-actions>
+      </mat-card> -->
+  </div>
+</div>

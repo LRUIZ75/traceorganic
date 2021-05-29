@@ -3,10 +3,10 @@ import { SharedModule } from '@shared/shared.module';
 import { SecurityRoutingModule } from './security-routing.module';
 import { SecurityUsersComponent } from './users/users.component';
 import { SecurityPeopleComponent } from './people/people.component';
-import { AddComponent } from './users/add/add.component';
 import { SecurityRolesComponent } from './roles/roles.component';
 import { AddpeopleComponent } from './people/addpeople/addpeople.component';
 import { PersoncardComponent } from './people/personcard/personcard.component';
+import { AddusersComponent } from './users/addusers/addusers.component';
 
 const COMPONENTS = [SecurityUsersComponent, SecurityPeopleComponent, SecurityRolesComponent];
 const COMPONENTS_DYNAMIC = [];
@@ -19,9 +19,9 @@ const COMPONENTS_DYNAMIC = [];
   declarations: [
     ...COMPONENTS,
     ...COMPONENTS_DYNAMIC,
-    AddComponent,
     AddpeopleComponent,
     PersoncardComponent,
+    AddusersComponent,
   ],
   entryComponents: COMPONENTS_DYNAMIC
 })

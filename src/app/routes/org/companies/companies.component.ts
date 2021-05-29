@@ -11,14 +11,18 @@ import { Company, CompaniesService } from 'app/services';
 import { DataTableTranslations } from 'ornamentum';
 import { HttpResponse } from '@angular/common/http';
 
+
+
 @Component({
   selector: 'app-org-companies',
   templateUrl: './companies.component.html',
   styleUrls: ['./companies.component.scss'],
-  providers: [CompaniesService],
+  providers: [CompaniesService]
 })
 export class OrgCompaniesComponent implements OnInit {
   /* Variables locales */
+
+
 
   public currentState: string = 'RETRIEVE';
   public selected: Company;

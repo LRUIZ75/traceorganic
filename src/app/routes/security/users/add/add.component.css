@@ -1,8 +1,0 @@
-.password-reveal {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .password-reveal > * {
-    width: 100%;
-  }

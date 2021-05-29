@@ -1,11 +1,12 @@
 <page-header></page-header>
 <div *ngIf="currentState == 'ADD' || currentState == 'EDIT'">
-  <app-adduser
-    [formMode]="currentState"
-    [selectedId]="selected"
-    (changeStateEvent)="changeState(event)"
+  <app-addusers
+
   >
-  </app-adduser>
+  <!--     [formMode]="currentState"
+    [selectedId]="selected"
+    (changeStateEvent)="changeState(event)" -->
+  </app-addusers>
 </div>
 
 <mat-card *ngIf="currentState == 'RETRIEVE'">
