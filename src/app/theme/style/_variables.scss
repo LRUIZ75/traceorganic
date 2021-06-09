@@ -1,10 +1,30 @@
 @import '~@angular/material/theming';
 @import '/src/styles/custom/traceorganic';
 
-//Ornamentum changes!
+//TODO: Ornamentum styles changes!
 $data-table-top-header-background :  mat-color($mat-greenleaf,600);
-$data-table-row-hover-background:  mat-color($mat-greenleaf,400);
-$data-table-selected-row-hover-background:  mat-color($mat-greenleaf,400);
+
+$data-table-row-hover-background:  mat-color($mat-greenleaf,100) !important;
+$data-table-selected-row-hover-background:  mat-color($mat-greenleaf,200) !important;
+$data-table-selected-row-background: mat-color($mat-greenleaf,100);
+
+$data-table-even-row-background: mat-color($mat-cornyellow,50);
+$data-table-odd-row-background: mat-color($mat-greenleaf,50);
+
+$data-table-content-header-background: mat-color($mat-greenleaf,100);
+$data-table-pagination-background: mat-color($mat-greenleaf,100);
+
+$data-table-pagination-range-value-text-color: mat-contrast($mat-greenleaf,100);
+
+.ng-data-table-checkbox-container input[type="checkbox"]:checked + label::before, .ng-dropdown-checkbox-container input[type="checkbox"]:checked + label::before {
+  background: #3b3c35;
+  border-color: #344;
+  transition: background 0.2s cubic-bezier(0.45, 2, 0.5, 0.75);
+}
+.ng-dropdown-search .ng-dropdown-input-group .ng-dropdown-input-group-addon {
+  background: mat-color($mat-greenleaf,200);
+}
+
 
 // Layout
 $gutter: 16px !default;

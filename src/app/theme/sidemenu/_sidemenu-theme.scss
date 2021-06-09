@@ -20,7 +20,7 @@
       &.active {
         > a {
           background-color: if($is-dark-theme, rgba(mat-color($primary), .15), transparent);
-          color: if($is-dark-theme, lighten(mat-color($primary), 25%), mat-color($accent));
+          color: if($is-dark-theme, lighten(mat-color($primary), 25%), darken(mat-color($accent),25%));
 
           &:hover {
             background: mat-color($background, hover);

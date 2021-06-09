@@ -10,7 +10,12 @@
         "value": "5"
       }
     },
-    
+    {
+      "route": "settings",
+      "name" : "settings",
+      "type": "link",
+      "icon": "settings"
+    },
     {
       "route": "security",
       "name": "security",
@@ -38,7 +43,7 @@
       "route": "org",
       "name": "organization",
       "type": "sub",
-      "icon": "domain",
+      "icon": "home_work",
       "children": [
         {
           "route": "companies",
@@ -46,32 +51,38 @@
           "type": "link"
         },
         {
-          "route": "departments",
-          "name": "departments",
+          "route": "warehouses",
+          "name": "warehouses",
           "type": "link"
         },
         {
-          "route": "jobpositions",
-          "name": "jobpositions",
+          "route": "proc-centers",
+          "name": "processingcenters",
           "type": "link"
         },
         {
-          "route": "employees",
-          "name": "employees",
+          "route": "farmers",
+          "name": "farmers",
           "type": "link"
         },
         {
-          "route": "dcs",
-          "name": "distributioncenters",
+          "route": "providers",
+          "name": "providers",
           "type": "link"
         }
       ]
     },
     {
+      "route": "products",
+      "name": "products",
+      "type": "link",
+      "icon" : "grass"
+    },
+    {
       "route": "fleet",
       "name": "fleet",
       "type": "sub",
-      "icon": "airport_shuttle",
+      "icon": "local_shipping",
       "children": [
         {
           "route": "vehicles",
@@ -83,32 +94,51 @@
           "name": "drivers",
           "type": "link"
         }
-        
       ]
     },
     {
-      "route": "clients",
-      "name": "clients",
-      "type": "link",
-      "icon": "people"
+      "route": "certification",
+      "name": "certification",
+      "type": "sub",
+      "icon": "eco",
+      "children": [
+
+        {
+          "route": "certifiers",
+          "name": "certifiers",
+          "type": "link"
+        },
+        {
+          "route": "certificates",
+          "name": "certificates",
+          "type": "link"
+        }
+
+      ]
     },
     {
-      "route": "logistic",
-      "name": "logistic",
+      "route": "gathering",
+      "name": "gathering",
       "type": "link",
-      "icon": "local_shipping"
+      "icon": "roofing"
     },
     {
-      "route": "invoicing",
-      "name": "invoicing",
+      "route": "handling",
+      "name": "handling",
       "type": "link",
-      "icon": "local_atm"
+      "icon": "room_preferences"
     },
     {
-      "route": "marketing",
-      "name": "marketing",
+      "route": "sales",
+      "name": "sales",
       "type": "link",
-      "icon": "announcement"
+      "icon": "monetization_on"
+    },
+    {
+      "route": "reports",
+      "name": "reports",
+      "type": "link",
+      "icon": "print"
     }
   ]
 }

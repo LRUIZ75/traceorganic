@@ -7,7 +7,6 @@ export interface Company {
   _id: string;
   fullName: string;
   shortName: string;
-  isActive: boolean;
   location: {
     lat: number;
     lng: number;
@@ -15,6 +14,9 @@ export interface Company {
   taxPayerCode: string;
   countryISOCode: string;
   logo: string;
+  picture: string;
+  googlemap: string;
+  isActive: boolean;
 }
 
 @Injectable({

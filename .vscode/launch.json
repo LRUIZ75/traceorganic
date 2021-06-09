@@ -6,16 +6,16 @@
     "configurations": [
         {
             "command": "npm start",
-            "name": "Run npm start",
+            "name": "START DEBUG",
             "request": "launch",
-            "type": "node-terminal"
+            "type": "node-terminal",
         },
         {
             "type": "pwa-chrome",
             "request": "launch",
-            "name": "Launch Chrome",
+            "name": "CHROME DEBUG",
             "url": "http://localhost:4200",
-            "webRoot": "${workspaceFolder}"
+            "webRoot": "${workspaceFolder}/src"
         }
     ]
 }
